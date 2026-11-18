@@ -16,6 +16,8 @@
 
 GitHub 的排程 cron 常延遲 5～30 分鐘，這是正常現象。
 
+**連線實測（2026-11-18）**：GitHub-hosted runner（ubuntu-latest）可以正常連到 coolpc.com.tw，解析出 6,586 筆、30 類，所以不需要 self-hosted runner。如果之後被擋，改用下面的「備案：本機 cron」。
+
 ## 修改目標配置
 
 編輯 `data/config.json`，commit 後下一次執行就會生效（想立刻看結果就手動觸發一次）。
