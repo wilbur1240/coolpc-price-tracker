@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: '50 1 * * *'   # 09:50 Asia/Taipei
   workflow_dispatch:
+    inputs:
+      notify_test:
+        description: '只發一則測試通知（不抓價格、不寫資料）'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -25,10 +30,21 @@ jobs:
 
       - run: pip install -r requirements.txt
 
+      - name: Send test notification only
+        if: inputs.notify_test
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          PAGE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+        run: python -m tracker notify-test
+
       - name: Unit tests
+        if: ${{ !inputs.notify_test }}
         run: python -m unittest -v
 
       - name: Fetch, match, render, notify
+        if: ${{ !inputs.notify_test }}
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
           NTFY_SERVER: ${{ secrets.NTFY_SERVER }}
@@ -39,7 +55,7 @@ jobs:
         run: python -m tracker run --save-raw build/raw.html
 
       - name: Upload raw HTML (debug)
-        if: always()
+        if: ${{ always() && !inputs.notify_test }}
         uses: actions/upload-artifact@v4
         with:
           name: raw-html
@@ -48,6 +64,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Commit data and page
+        if: ${{ !inputs.notify_test }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

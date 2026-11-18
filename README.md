@@ -76,7 +76,8 @@ gh workflow run daily.yml -R wilbur1240/coolpc-price-tracker
 
 ### 測試
 
-在本機設好環境變數後執行 `python -m tracker notify-test`。如果要測 Actions 上的設定，手動觸發一次 workflow，再看 log 裡的 `[notify]` 行。
+- Actions 上：**Actions → daily price check → Run workflow**，勾選「只發一則測試通知」。這樣只會發通知，不會抓價格。也可以用 CLI：`gh workflow run daily.yml -f notify_test=true`
+- 本機：設好環境變數後執行 `python -m tracker notify-test`
 
 ### 通知規則
 
