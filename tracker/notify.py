@@ -61,6 +61,47 @@ def daily_summary(cfg: dict, hist: dict, date: str) -> str:
     return f"{line}；{hits}/{n} 已達目標價"
 
 
+def telegram_diagnose():
+    """Print token shape (never the token), connectivity and getMe result."""
+    import re
+    import time
+    tok = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+    chat = os.environ.get("TELEGRAM_CHAT_ID", "")
+    s = tok.strip()
+    odd = sorted({repr(c) for c in s if not (c.isascii() and (c.isalnum() or c in ":-_"))})
+    print(f"[diag] token: raw len={len(tok)}, stripped len={len(s)}, "
+          f"format_ok={bool(re.fullmatch(r'[0-9]+:[A-Za-z0-9_-]{30,}', s))}, "
+          f"starts_with_bot={s.lower().startswith('bot')}, odd_chars={odd}")
+    print(f"[diag] chat id: len={len(chat.strip())}, digits_only={chat.strip().lstrip('-').isdigit()}")
+    t = time.time()
+    try:
+        r = requests.get("https://api.telegram.org/", timeout=15)
+        print(f"[diag] reach api.telegram.org: HTTP {r.status_code} in {time.time() - t:.1f}s")
+    except requests.RequestException as e:
+        print(f"[diag] reach api.telegram.org FAILED after {time.time() - t:.1f}s: {type(e).__name__}")
+    if s:
+        t = time.time()
+        try:
+            r = requests.get(f"https://api.telegram.org/bot{s}/getMe", timeout=15)
+            j = r.json()
+            info = j.get("result", {}).get("username") if j.get("ok") else j.get("description")
+            print(f"[diag] getMe: HTTP {r.status_code} in {time.time() - t:.1f}s -> {info}")
+        except (requests.RequestException, ValueError) as e:
+            print(f"[diag] getMe FAILED after {time.time() - t:.1f}s: {type(e).__name__}")
+
+
+def _post(url: str, **kw):
+    """POST with a couple of retries on timeouts / connection errors."""
+    for attempt in range(3):
+        try:
+            r = requests.post(url, timeout=30, **kw)
+            r.raise_for_status()
+            return r
+        except (requests.Timeout, requests.ConnectionError):
+            if attempt == 2:
+                raise
+
+
 def send(title: str, body: str, priority: str = "default", tags: str = "") -> list[str]:
     """Send to every configured channel. Returns list of channels that succeeded."""
     url = os.environ.get("PAGE_URL", "").strip()
@@ -86,12 +127,18 @@ def send(title: str, body: str, priority: str = "default", tags: str = "") -> li
     if tg_tok and tg_chat:
         text = f"{title}\n{body}" + (f"\n{url}" if url else "")
         try:
-            r = requests.post(f"https://api.telegram.org/bot{tg_tok}/sendMessage",
-                              json={"chat_id": tg_chat, "text": text, "disable_web_page_preview": True}, timeout=20)
-            r.raise_for_status()
+            _post(f"https://api.telegram.org/bot{tg_tok}/sendMessage",
+                  json={"chat_id": tg_chat, "text": text, "disable_web_page_preview": True})
             sent.append("telegram")
+        except requests.HTTPError as e:
+            desc = ""
+            try:
+                desc = e.response.json().get("description", "")
+            except ValueError:
+                pass
+            print(f"[notify] telegram failed: HTTP {e.response.status_code} {desc}")  # never echo URL (has token)
         except requests.RequestException as e:
-            print(f"[notify] telegram failed: {type(e).__name__}")  # don't echo URL (contains token)
+            print(f"[notify] telegram failed: {type(e).__name__}")
     if not sent:
         print(f"[notify] (no channel configured / all failed) {title}\n{body}")
     return sent

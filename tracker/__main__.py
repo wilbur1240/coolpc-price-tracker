@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from pathlib import Path
 
@@ -104,6 +105,8 @@ def cmd_render(args) -> int:
 
 
 def cmd_notify_test(args) -> int:
+    if os.environ.get("TELEGRAM_BOT_TOKEN") or os.environ.get("TELEGRAM_CHAT_ID"):
+        notify.telegram_diagnose()
     sent = notify.send("原價屋價格追蹤：測試通知", "如果你看到這則訊息，通知設定成功。", tags="white_check_mark")
     print(f"[notify-test] sent via: {sent or 'nothing'}")
     return 0 if sent else 1
