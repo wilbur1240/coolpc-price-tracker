@@ -79,14 +79,18 @@ def cmd_run(args) -> int:
         return 0
 
     send_daily = (cfg.get("notify") or {}).get("daily_summary", False)
+    sent_alerts = old.get("alerts_sent")   # only alerts that actually reached a channel
     if not args.no_notify and (alerts or send_daily):
-        if alerts and old.get("alerts") == alerts:
+        if alerts and sent_alerts == alerts:
             print("[run] 今天已送過相同通知，略過")
         else:
-            body = "\n".join(alerts + ([summary] if alerts else [])) if alerts else summary
-            notify.send(f"原價屋：{cfg.get('build_name', '目標配置')}", body,
-                        priority="high" if alerts else "low", tags="moneybag")
+            body = "\n".join(alerts + [summary]) if alerts else summary
+            if notify.send(f"原價屋：{cfg.get('build_name', '目標配置')}", body,
+                           priority="high" if alerts else "low", tags="moneybag"):
+                sent_alerts = alerts
     entry["alerts"] = alerts
+    if sent_alerts is not None:
+        entry["alerts_sent"] = sent_alerts
 
     store.save_history(hist)
     store.save_snapshot(date, rows)
