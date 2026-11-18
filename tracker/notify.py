@@ -79,6 +79,12 @@ def telegram_diagnose():
         print(f"[diag] reach api.telegram.org: HTTP {r.status_code} in {time.time() - t:.1f}s")
     except requests.RequestException as e:
         print(f"[diag] reach api.telegram.org FAILED after {time.time() - t:.1f}s: {type(e).__name__}")
+    t = time.time()
+    try:
+        r = requests.get("https://api.telegram.org/bot1234567890:" + "A" * 35 + "/getMe", timeout=15)
+        print(f"[diag] fake-token getMe (expect 401): HTTP {r.status_code} in {time.time() - t:.1f}s")
+    except requests.RequestException as e:
+        print(f"[diag] fake-token getMe FAILED after {time.time() - t:.1f}s: {type(e).__name__}")
     if s:
         t = time.time()
         try:
