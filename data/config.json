@@ -1,0 +1,149 @@
+{
+ "build_name": "Robotics Development Workstation",
+ "target_total": 63500,
+ "watch_categories": [
+  "CPU",
+  "主機板",
+  "記憶體",
+  "SSD",
+  "顯示卡",
+  "電源供應器",
+  "散熱器",
+  "CASE"
+ ],
+ "items": [
+  {
+   "slot": "CPU",
+   "category": "CPU",
+   "match": [
+    "9700X"
+   ],
+   "exclude": [
+    "拆封",
+    "福利",
+    "盒損",
+    "X3D"
+   ],
+   "qty": 1,
+   "target_price": 9000
+  },
+  {
+   "slot": "GPU",
+   "category": "顯示卡",
+   "match": [
+    "5060Ti",
+    "16G"
+   ],
+   "exclude": [
+    "拆封",
+    "福利"
+   ],
+   "qty": 1,
+   "target_price": 22000
+  },
+  {
+   "slot": "GPU 升級",
+   "category": "顯示卡",
+   "match": [
+    "5070Ti",
+    "16G"
+   ],
+   "exclude": [
+    "拆封",
+    "福利"
+   ],
+   "qty": 1,
+   "target_price": 35000,
+   "optional": true
+  },
+  {
+   "slot": "主機板",
+   "category": "主機板",
+   "match": [
+    "B850",
+    "TOMAHAWK"
+   ],
+   "exclude": [
+    "拆封",
+    "福利"
+   ],
+   "qty": 1,
+   "target_price": 5500
+  },
+  {
+   "slot": "RAM 64GB",
+   "category": "記憶體",
+   "match": [
+    "64G",
+    "*2"
+   ],
+   "exclude": [
+    "D4",
+    "DDR4",
+    "NB",
+    "筆電",
+    "SO-DIMM",
+    "拆封"
+   ],
+   "qty": 1,
+   "target_price": 15000
+  },
+  {
+   "slot": "SSD 2TB",
+   "category": "SSD",
+   "match": [
+    "SN850X",
+    "2TB"
+   ],
+   "exclude": [
+    "散熱片",
+    "拆封",
+    "福利"
+   ],
+   "qty": 1,
+   "target_price": 5000
+  },
+  {
+   "slot": "PSU 850W",
+   "category": "電源供應器",
+   "match": [
+    "850W",
+    "金牌",
+    "3.1"
+   ],
+   "exclude": [
+    "拆封",
+    "福利"
+   ],
+   "qty": 1,
+   "target_price": 3500
+  },
+  {
+   "slot": "散熱器",
+   "category": "散熱",
+   "match": [
+    "PhantomSpirit120"
+   ],
+   "exclude": [
+    "EVO",
+    "拆封"
+   ],
+   "qty": 1,
+   "target_price": 1500
+  },
+  {
+   "slot": "機殼",
+   "category": "CASE",
+   "match": [
+    "Pop",
+    "Air"
+   ],
+   "exclude": [
+    "拆封",
+    "Mini"
+   ],
+   "qty": 1,
+   "target_price": 2000
+  }
+ ]
+}

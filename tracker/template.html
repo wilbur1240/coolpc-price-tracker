@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>__TITLE__</title>
+<style>
+:root{--bg:#f7f7f5;--fg:#1c1917;--mut:#78716c;--card:#fff;--line:#e7e5e4;--up:#c0392b;--dn:#15803d;--acc:#2563eb;--hitbg:#dcfce7;--optbg:#eff4ff;--missbg:#fdecea}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#161514;--fg:#f2f1ef;--mut:#a29d98;--card:#22201e;--line:#3a3633;--up:#f2867a;--dn:#5bd68a;--acc:#7aa7ff;--hitbg:#173a26;--optbg:#1c2433;--missbg:#3a1f1c}}
+:root[data-theme=dark]{--bg:#161514;--fg:#f2f1ef;--mut:#a29d98;--card:#22201e;--line:#3a3633;--up:#f2867a;--dn:#5bd68a;--acc:#7aa7ff;--hitbg:#173a26;--optbg:#1c2433;--missbg:#3a1f1c}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 system-ui,-apple-system,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}
+main{max-width:1040px;margin:auto;padding:20px 16px 40px}
+header{display:flex;gap:12px;align-items:flex-start;justify-content:space-between}
+h1{font-size:21px;margin:0;line-height:1.3}h2{font-size:17px;margin:30px 0 10px}
+.mut{color:var(--mut)}.up{color:var(--up)}.dn{color:var(--dn)}.small{font-size:13px}
+button.theme{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;padding:5px 10px;cursor:pointer;white-space:nowrap}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.card .v{font-size:21px;font-weight:650;font-variant-numeric:tabular-nums}
+.wrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font-size:13px;color:var(--mut);font-weight:500;white-space:nowrap}
+.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+#tgt tbody tr{cursor:pointer}#tgt tbody tr:hover td{background:color-mix(in srgb,var(--acc) 7%,transparent)}
+#tgt tr.sel td:first-child{box-shadow:inset 3px 0 0 var(--acc)}
+tr.opt td{background:var(--optbg)}tr.miss td{background:var(--missbg)}
+.hit{background:var(--hitbg);color:var(--dn);font-weight:600;border-radius:6px;padding:1px 6px}
+.badge{display:inline-block;font-size:12px;border-radius:6px;padding:0 6px;background:var(--optbg);color:var(--acc)}
+.chart{width:100%;display:block}
+.chart .ln{fill:none;stroke:var(--acc);stroke-width:2.2}.chart circle{fill:var(--acc)}
+.chart .tg{stroke:var(--dn);stroke-dasharray:5 4;stroke-width:1.4}.chart .grid{stroke:var(--line)}
+.chart text{fill:var(--mut);font-size:11px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.chips button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--fg);border-radius:999px;padding:3px 10px;cursor:pointer}
+.chips button.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.ctl{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+input,select{font:inherit;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--fg);min-width:0}
+#q{flex:1 1 220px}
+#list td{font-size:14px}#list th.sort{cursor:pointer;user-select:none}
+#more button{font:inherit;margin-left:8px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;padding:3px 10px;cursor:pointer}
+@media(max-width:640px){
+ #tgt thead{display:none}#tgt,#tgt tbody,#tgt tr,#tgt td{display:block;width:100%}
+ #tgt tr{border-bottom:1px solid var(--line);padding:8px 4px}#tgt td{border:0;padding:2px 8px}
+ #tgt td.r{text-align:left;display:inline-block;width:auto;padding-right:14px}
+ #tgt td.r::before{content:attr(data-l)" ";color:var(--mut);font-size:12px}
+ #list .gcol{display:none}
+}
+</style>
+</head>
+<body>
+<main>
+<header>
+ <div><h1 id=title></h1><div class="mut small" id=sub></div></div>
+ <button class=theme id=themeBtn type=button>亮／暗</button>
+</header>
+<div class=cards id=cards></div>
+<h2>目標配置 <span class="mut small" id=hits></span></h2>
+<div class=wrap><table id=tgt><thead><tr><th>部件</th><th>今日最便宜的符合品項</th><th class=r>數量</th><th class=r>單價</th><th class=r>較前次</th><th class=r>歷史最低</th><th class=r>目標價</th></tr></thead><tbody></tbody></table></div>
+<h2>總價走勢</h2>
+<div class=panel id=totalChart></div>
+<h2>部件單價走勢</h2>
+<div class=panel><div class=chips id=chips></div><div id=itemChart></div></div>
+<h2>今日完整報價 <span class="mut small" id=rowsInfo></span></h2>
+<div class=ctl>
+ <input id=q type=search placeholder="搜尋，空白分隔多個關鍵字，例如：4070 super 白" autocomplete=off>
+ <select id=c><option value="">全部分類</option></select>
+ <select id=s><option value="">原始順序</option><option value="asc">價格低→高</option><option value="desc">價格高→低</option></select>
+</div>
+<div class=wrap><table id=list><thead><tr><th>分類</th><th class=gcol>子分類</th><th>品項</th><th class="r sort" id=ph>價格</th></tr></thead><tbody></tbody></table></div>
+<div id=more class="mut small" style="margin-top:6px"></div>
+<p class="mut small" style="margin-top:28px">價格以原價屋線上估價當日顯示為準，實際成交價需經原價屋客服確認。資料每日台北時間 09:50 左右自動更新。產生時間 <span id=gen></span>。</p>
+</main>
+<script id=data type="application/json">__DATA__</script>
+<script>
+(function(){
+const D=JSON.parse(document.getElementById('data').textContent);
+const cfg=D.cfg,H=D.history,date=D.date,rows=D.rows;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[m]);
+const fmt=n=>n==null?'—':Number(n).toLocaleString('en-US');
+const nz=s=>(s||'').normalize('NFKC').replace(/\s+/g,'').toLowerCase();
+
+// theme toggle (auto by default; remembered per browser)
+const root=document.documentElement;
+try{const t=localStorage.getItem('theme');if(t)root.dataset.theme=t;}catch(e){}
+$('themeBtn').onclick=()=>{const dark=root.dataset.theme?root.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+ root.dataset.theme=dark?'light':'dark';try{localStorage.setItem('theme',root.dataset.theme);}catch(e){}};
+
+const dates=Object.keys(H).sort();
+const cur=H[date]||{items:{},total:0};
+const prevDates=dates.filter(d=>d<date);
+const prev=prevDates.length?H[prevDates[prevDates.length-1]]:null;
+const name=cfg.build_name||'目標配置';
+$('title').textContent=name+' 價格追蹤';
+document.title=name+' 價格追蹤';
+$('sub').textContent=`原價屋線上估價 · 資料日期 ${date} · 已追蹤 ${dates.length} 天`;
+$('gen').textContent=D.generated;
+
+function delta(c,o){
+ if(c==null||o==null)return '<span class=mut>—</span>';
+ const d=c-o; if(!d)return '<span class=mut>±0</span>';
+ const p=o?` <span class=small>(${(d/o*100).toFixed(1)}%)</span>`:'';
+ return `<span class=${d<0?'dn':'up'}>${d<0?'▼':'▲'} ${fmt(Math.abs(d))}${p}</span>`;
+}
+
+// summary
+const complete=!!cur.complete;
+const completeTotals=dates.filter(d=>H[d].complete).map(d=>H[d].total);
+const low=completeTotals.length?Math.min(...completeTotals):null;
+const prevTotal=prev&&prev.complete?prev.total:null;
+const tgt=cfg.target_total;
+const withTp=cfg.items.filter(it=>it.target_price!=null);
+const hits=withTp.filter(it=>cur.items[it.slot]&&cur.items[it.slot].price<=it.target_price).length;
+const card=(k,v,x)=>`<div class=card><div class="mut small">${k}</div><div class=v>${v}</div>${x||''}</div>`;
+$('cards').innerHTML=
+ card('今日總價'+(complete?'':'（不完整）'),'NT$ '+fmt(cur.total),complete?'':'<div class="up small">有缺項，不計入走勢</div>')+
+ card('較前次',delta(complete?cur.total:null,prevTotal))+
+ card('目標總價',tgt?'NT$ '+fmt(tgt):'—',tgt&&complete?`<div class="${cur.total<=tgt?'dn':'up'} small">${cur.total<=tgt?'已低於目標 ':'還差 '}${fmt(Math.abs(cur.total-tgt))}</div>`:'')+
+ card('追蹤以來最低總價',low!=null?'NT$ '+fmt(low):'—')+
+ card('已達目標價',`${hits}/${withTp.length}`);
+$('hits').textContent=`· ${hits}/${withTp.length} 已達目標價`;
+
+// target table
+let selSlot=null;
+const tb=$('tgt').querySelector('tbody');
+tb.innerHTML=cfg.items.map(it=>{
+ const s=it.slot,t=cur.items[s],tp=it.target_price;
+ const lows=dates.map(d=>H[d].items&&H[d].items[s]).filter(Boolean).map(x=>x.price);
+ const o=prev&&prev.items&&prev.items[s]?prev.items[s].price:null;
+ const label=`<b>${esc(s)}</b>${it.optional?'<div><span class=badge>升級選項，不計入總價</span></div>':''}`;
+ if(!t)return `<tr class=miss data-s="${esc(s)}"><td>${label}</td><td colspan=6><b class=up>缺項</b> 今天找不到符合「${esc((it.match||[]).join(' '))}」的品項（可能缺貨或改名）</td></tr>`;
+ const hit=tp!=null&&t.price<=tp;
+ return `<tr class="${it.optional?'opt':''}" data-s="${esc(s)}"><td>${label}</td><td>${esc(t.name)}${t.alts?` <span class="mut small">(另有 ${t.alts} 個符合)</span>`:''}</td>`+
+  `<td class=r data-l=數量>${t.qty}</td><td class=r data-l=單價>${fmt(t.price)}</td><td class=r data-l=較前次>${delta(t.price,o)}</td>`+
+  `<td class=r data-l=歷史最低>${fmt(Math.min(...lows))}</td><td class=r data-l=目標>${tp!=null?(hit?`<span class=hit>✓ ${fmt(tp)}</span>`:fmt(tp)):'—'}</td></tr>`;
+}).join('');
+tb.querySelectorAll('tr').forEach(tr=>tr.onclick=()=>{pick(tr.dataset.s);$('itemChart').scrollIntoView({behavior:'smooth',block:'center'});});
+
+// charts
+function chart(el,pts,target,emptyMsg){
+ if(!pts.length){el.innerHTML=`<p class=mut>${emptyMsg}</p>`;return;}
+ const W=760,Hh=230,L=62,R=16,T=16,B=30;
+ const vals=pts.map(p=>p.v).concat(target!=null?[target]:[]);
+ let lo=Math.min(...vals),hi=Math.max(...vals); if(hi===lo){hi+=Math.max(1,hi*.02);lo-=Math.max(1,lo*.02);}
+ const pad=(hi-lo)*.08;lo-=pad;hi+=pad;
+ const X=i=>pts.length===1?(L+W-R)/2:L+i*(W-L-R)/(pts.length-1);
+ const Y=v=>T+(hi-v)*(Hh-T-B)/(hi-lo);
+ let g='';
+ for(let k=0;k<=3;k++){const v=lo+(hi-lo)*k/3;g+=`<line class=grid x1=${L} x2=${W-R} y1=${Y(v).toFixed(1)} y2=${Y(v).toFixed(1)} /><text x=${L-6} y=${(Y(v)+4).toFixed(1)} text-anchor=end>${fmt(Math.round(v))}</text>`;}
+ if(target!=null)g+=`<line class=tg x1=${L} x2=${W-R} y1=${Y(target).toFixed(1)} y2=${Y(target).toFixed(1)} /><text x=${W-R} y=${(Y(target)-5).toFixed(1)} text-anchor=end>目標 ${fmt(target)}</text>`;
+ const line=pts.map((p,i)=>`${X(i).toFixed(1)},${Y(p.v).toFixed(1)}`).join(' ');
+ const dots=pts.map((p,i)=>`<circle cx=${X(i).toFixed(1)} cy=${Y(p.v).toFixed(1)} r=${pts.length>60?2:3.5}><title>${p.d}：${fmt(p.v)}</title></circle>`).join('');
+ const xl=`<text x=${X(0).toFixed(1)} y=${Hh-8} text-anchor=${pts.length===1?'middle':'start'}>${pts[0].d}</text>`+(pts.length>1?`<text x=${W-R} y=${Hh-8} text-anchor=end>${pts[pts.length-1].d}</text>`:'');
+ el.innerHTML=`<svg class=chart viewBox="0 0 ${W} ${Hh}" role=img>${g}${pts.length>1?`<polyline class=ln points="${line}"/>`:''}${dots}${xl}</svg>`+(pts.length===1?'<div class="mut small">目前只有一天的資料，累積更多天後會連成走勢線。</div>':'');
+}
+chart($('totalChart'),dates.filter(d=>H[d].complete).map(d=>({d,v:H[d].total})),tgt,'還沒有完整（無缺項）的資料。');
+
+$('chips').innerHTML=cfg.items.map(it=>`<button type=button data-s="${esc(it.slot)}">${esc(it.slot)}</button>`).join('');
+$('chips').querySelectorAll('button').forEach(b=>b.onclick=()=>pick(b.dataset.s));
+function pick(s){
+ selSlot=s;
+ $('chips').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.s===s));
+ tb.querySelectorAll('tr').forEach(tr=>tr.classList.toggle('sel',tr.dataset.s===s));
+ const it=cfg.items.find(i=>i.slot===s);
+ chart($('itemChart'),dates.filter(d=>H[d].items&&H[d].items[s]).map(d=>({d,v:H[d].items[s].price})),it&&it.target_price,'這個部件還沒有價格紀錄。');
+}
+if(cfg.items.length)pick(cfg.items[0].slot);
+
+// full price list
+const cats=[...new Set(rows.map(r=>r.cat))];
+$('c').innerHTML+=cats.map(c=>`<option>${esc(c)}</option>`).join('');
+$('rowsInfo').textContent=`· ${fmt(rows.length)} 筆 / ${cats.length} 類`;
+rows.forEach((r,i)=>{r._i=i;r._k=nz(r.cat+' '+r.group+' '+r.name);});
+let limit=300;
+function draw(){
+ const ks=$('q').value.trim().split(/\s+/).filter(Boolean).map(nz),cc=$('c').value,so=$('s').value;
+ let r=rows.filter(x=>(!cc||x.cat===cc)&&ks.every(k=>x._k.includes(k)));
+ if(so)r=r.slice().sort((a,b)=>so==='asc'?a.price-b.price||a._i-b._i:b.price-a.price||a._i-b._i);
+ $('list').querySelector('tbody').innerHTML=r.slice(0,limit).map(x=>`<tr><td class="mut small">${esc(x.cat)}</td><td class="mut small gcol">${esc(x.group)}</td><td>${esc(x.name)}</td><td class=r>${fmt(x.price)}</td></tr>`).join('');
+ $('ph').textContent='價格'+(so==='asc'?' ▲':so==='desc'?' ▼':'');
+ $('more').innerHTML=r.length>limit?`共 ${fmt(r.length)} 筆，顯示前 ${fmt(limit)} 筆<button type=button id=moreBtn>再顯示 300 筆</button>`:`共 ${fmt(r.length)} 筆`;
+ const mb=$('moreBtn'); if(mb)mb.onclick=()=>{limit+=300;draw();};
+}
+$('q').oninput=$('c').onchange=$('s').onchange=()=>{limit=300;draw();};
+$('ph').onclick=()=>{const s=$('s');s.value=s.value===''?'asc':s.value==='asc'?'desc':'';limit=300;draw();};
+draw();
+})();
+</script>
+</body>
+</html>
