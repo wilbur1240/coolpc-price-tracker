@@ -106,6 +106,10 @@
   "alerts": [
    "🎯 PSU 850W 達到目標價：2,390 ≤ 3,500（｛XPG CORE SHIFT II VE 850W｝雙8/金牌/直出線/ATX）",
    "🎯 散熱器 達到目標價：1,490 ≤ 1,500（｛利民 Phantom Spirit 120｝7導管(6mm)/雙塔雙扇/高15）"
+  ],
+  "alerts_sent": [
+   "🎯 PSU 850W 達到目標價：2,390 ≤ 3,500（｛XPG CORE SHIFT II VE 850W｝雙8/金牌/直出線/ATX）",
+   "🎯 散熱器 達到目標價：1,490 ≤ 1,500（｛利民 Phantom Spirit 120｝7導管(6mm)/雙塔雙扇/高15）"
   ]
  }
 }
