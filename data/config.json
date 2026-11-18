@@ -1,6 +1,9 @@
 {
  "build_name": "Robotics Development Workstation",
  "target_total": 63500,
+ "notify": {
+  "daily_summary": true
+ },
  "watch_categories": [
   "CPU",
   "主機板",
