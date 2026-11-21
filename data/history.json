@@ -460,16 +460,52 @@
       "price": 23500,
       "in_stock": true,
       "url": "https://shop.teama.com.tw/products/bambu-lab-p2s-p2s-combo"
+     },
+     {
+      "source": "萬家福線上購物",
+      "title": "[拓竹Bambu Lab ]P2S 3D列印機",
+      "price": 23500,
+      "in_stock": true,
+      "url": "https://online.uni-prosperity.com.tw/zh/%E6%8B%93%E7%AB%B9/A504021651301.html",
+      "via": "BigGo"
+     },
+     {
+      "source": "順發線上購物",
+      "title": "(客訂品)Bambu Lab P2S 3D列印機",
+      "price": 23500,
+      "in_stock": true,
+      "url": "https://www.isunfar.com.tw/product/?prodseq=380C03",
+      "via": "BigGo"
+     },
+     {
+      "source": "momo購物網",
+      "title": "【Bambu Lab】【領券再折】P2S/P2S Combo 3D列印機 廠商配送",
+      "price": 23500,
+      "in_stock": true,
+      "url": "https://www.momoshop.com.tw/TP/TP0005634/goodsDetail/TP00056340007789",
+      "via": "BigGo"
+     },
+     {
+      "source": "酷澎 Coupang",
+      "title": "Bambu Lab 拓竹 P2S / P2S Combo 3D 列印機 - 高速靜穩專業級 單機",
+      "price": 24500,
+      "in_stock": true,
+      "url": "https://coupang.onelink.me/yowQ?pageKey=679015396163587&ctag=679015396163587&itemId=646526782980164&vendorItemId=646526783078437&pid=coupang_partners&c=AF8782393&is_retargeting=true&af_reengagement_window=7d&af_c_id=AF8782393&af_sub5=TWAFSDP&af_click_lookback=7d&deep_link_value=coupang%3A%2F%2Fproduct%3FpId%3D679015396163587%26itemId%3D646526782980164%26vendorItemId%3D646526783078437&af_r=https%3A%2F%2Flink.tw.coupang.com%2Fre2%2FTWAFSDP%3Flptag%3DAF8782393",
+      "via": "BigGo"
+     },
+     {
+      "source": "蝦皮商城",
+      "title": "Bambu Lab P2S 3D列印機 廠商配送",
+      "price": 24500,
+      "in_stock": true,
+      "url": "https://shopee.tw/product/116026822/46612375953",
+      "via": "BigGo"
      }
     ],
     "errors": [
      {
-      "source": "主要通路（BigGo 比價）",
-      "error": "HTTP 429"
-     },
-     {
       "source": "Bambu Lab 官方商店（亞洲站）",
-      "error": "找不到指定地區／款式的價格"
+      "error": "找不到 Taiwan 的價格（實際網址 https://us.store.bambulab.com/products/p2s，地區 []）"
      }
     ]
    }
