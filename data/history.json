@@ -429,7 +429,51 @@
     "count": 724
    }
   },
-  "count": 6611,
+  "count": 6613,
+  "products": {
+   "Bambu Lab P2S": {
+    "best": {
+     "source": "3DMart（台灣總代理）",
+     "title": "拓竹 Bambu Lab P2S 3D列印機系列（P2S）",
+     "price": 23500,
+     "in_stock": true,
+     "url": "https://3dmart.com.tw/products/bambu-lab-p2s-3d-printer-full"
+    },
+    "offers": [
+     {
+      "source": "3DMart（台灣總代理）",
+      "title": "拓竹 Bambu Lab P2S 3D列印機系列（P2S）",
+      "price": 23500,
+      "in_stock": true,
+      "url": "https://3dmart.com.tw/products/bambu-lab-p2s-3d-printer-full"
+     },
+     {
+      "source": "Kidendesign 起點設計",
+      "title": "拓竹Bambu Lab P2S /P2S Combo 3D列印機（P2S / 單機）",
+      "price": 23500,
+      "in_stock": false,
+      "url": "https://shop.kidendesign.com/products/bambu-lab-p2s"
+     },
+     {
+      "source": "天馬科技",
+      "title": "拓竹Bambu Lab P2S /P2S Combo 3D列印機（P2S）",
+      "price": 23500,
+      "in_stock": true,
+      "url": "https://shop.teama.com.tw/products/bambu-lab-p2s-p2s-combo"
+     }
+    ],
+    "errors": [
+     {
+      "source": "主要通路（BigGo 比價）",
+      "error": "HTTP 429"
+     },
+     {
+      "source": "Bambu Lab 官方商店（亞洲站）",
+      "error": "找不到指定地區／款式的價格"
+     }
+    ]
+   }
+  },
   "alerts": [],
   "alerts_sent": []
  }
