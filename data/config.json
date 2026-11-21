@@ -213,7 +213,7 @@
     {
      "name": "Bambu Lab 官方商店（亞洲站）",
      "type": "bambu_store",
-     "url": "https://asia.store.bambulab.com/products/p2s",
+     "url": "https://asia.store.bambulab.com/products/p2s?region=China+Taiwan",
      "region": "Taiwan",
      "variant": "P2S",
      "reference_only": true
