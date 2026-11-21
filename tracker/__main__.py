@@ -10,7 +10,7 @@ from . import notify, store
 from .fetch import FetchError, decode, fetch
 from .match import in_category, match_config
 from .parse import category_counts, parse_html, parse_pipe_txt
-from .products import track_all
+from .products import carry_forward, sort_offers, track_all
 from .render import render
 
 MIN_ROWS = 1000
@@ -67,7 +67,9 @@ def cmd_run(args) -> int:
     old = hist.get(date, {})
     if cfg.get("products") and not args.skip_products:
         entry["products"] = track_all(cfg)
+        carry_forward(entry["products"], hist, date)
         for slot, p in entry["products"].items():
+            sort_offers(p)
             b = p["best"]
             print(f"[products] {slot}: " + (f"最低 {b['price']:,}（{b['source']}）" if b else "沒有價格")
                   + f"，{len(p['offers'])} 個來源有價格" + (f"，失敗：{', '.join(e['source'] for e in p['errors'])}" if p["errors"] else ""))

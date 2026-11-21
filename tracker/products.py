@@ -202,10 +202,28 @@ def fetch_source(src: dict, prod: dict) -> list[dict]:
                    "note": f"{cur}{v['price']:g}，以匯率 {rate:.2f} 換算，未含運費／關稅" if rate else "匯率取得失敗"}]
     else:
         raise SourceError(f"未知的來源類型 {t}")
-    if src.get("reference_only"):
-        for o in offers:
+    for o in offers:
+        o["group"] = name
+        if src.get("reference_only"):
             o["ref"] = True
     return offers
+
+
+def carry_forward(products: dict, hist: dict, date: str) -> None:
+    """For sources that failed today, show their last successful offers, marked stale.
+    Stale offers never count toward the best price or alerts."""
+    for slot, p in products.items():
+        failed = {e["source"] for e in p.get("errors", [])}
+        # hist[date] (if present) is still the earlier run of today, so it is searched first
+        for d in sorted((d for d in hist if d <= date), reverse=True):
+            if not failed:
+                break
+            prev = ((hist[d].get("products") or {}).get(slot) or {})
+            got = {o.get("group") for o in prev.get("offers", []) if o.get("group") in failed and not o.get("stale")}
+            for o in prev.get("offers", []):
+                if o.get("group") in got and not o.get("stale"):
+                    p["offers"].append({**o, "stale": d})
+            failed -= got
 
 
 def track_product(prod: dict) -> dict:
@@ -233,6 +251,10 @@ def track_product(prod: dict) -> dict:
     best = min(pool, key=lambda o: o["price"]) if pool else None
     offers.sort(key=lambda o: (o.get("ref", False), o.get("price") or 10**9))
     return {"best": best, "offers": offers, "errors": errors}
+
+
+def sort_offers(p: dict) -> None:
+    p["offers"].sort(key=lambda o: (bool(o.get("ref")), bool(o.get("stale")), o.get("price") or 10**9))
 
 
 def track_all(cfg: dict) -> dict:

@@ -74,6 +74,22 @@ class BambuStoreTest(unittest.TestCase):
         self.assertEqual((v["price"], v["currency"], v["in_stock"]), (519.0, "USD", True))
 
 
+class CarryForwardTest(unittest.TestCase):
+    def test_failed_source_reuses_last_success(self):
+        from tracker.products import carry_forward
+        hist = {
+            "2026-11-19": {"products": {"P": {"offers": [{"source": "momo", "price": 1, "group": "BigGo"}]}}},
+            "2026-11-20": {"products": {"P": {"offers": [{"source": "momo", "price": 2, "group": "BigGo"},
+                                                         {"source": "A", "price": 3, "group": "A"}]}}},
+        }
+        today = {"P": {"best": {"price": 3}, "offers": [{"source": "A", "price": 3, "group": "A"}],
+                       "errors": [{"source": "BigGo", "error": "HTTP 429"}]}}
+        carry_forward(today, hist, "2026-11-21")
+        stale = [o for o in today["P"]["offers"] if o.get("stale")]
+        self.assertEqual([(o["source"], o["price"], o["stale"]) for o in stale], [("momo", 2, "2026-11-20")])
+        self.assertEqual(today["P"]["best"], {"price": 3})
+
+
 class ProductAlertTest(unittest.TestCase):
     def entry(self, price, source="momo"):
         return {"items": {}, "total": 0, "complete": True,

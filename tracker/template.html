@@ -162,9 +162,9 @@ if(prods.length){
    card('追蹤以來最低',lows.length?'NT$ '+fmt(Math.min(...lows)):'—')+'</div>';
   const orows=(P.offers||[]).map(o=>{
    const u=safeUrl(o.url),t=u?`<a class=ext href="${esc(u)}" target=_blank rel="noopener nofollow">${esc(o.title)}</a>`:esc(o.title);
-   const st=o.ref?'<span class=badge>參考</span>':o.in_stock?'<span class=dn>有貨</span>':'<span class=up>缺貨</span>';
-   const isBest=b&&!o.ref&&o.source===b.source&&o.price===b.price;
-   return `<tr${o.ref?' class=opt':''}><td>${esc(o.source)}${o.via?` <span class="mut small">via ${esc(o.via)}</span>`:''}</td><td>${t}${o.note?`<div class="mut small">${esc(o.note)}</div>`:''}</td>`+
+   const st=o.stale?`<span class=badge title="今天這個來源抓取失敗，顯示最近一次成功的資料，不計入最低價">沿用 ${esc(o.stale.slice(5))}</span>`:o.ref?'<span class=badge>參考</span>':o.in_stock?'<span class=dn>有貨</span>':'<span class=up>缺貨</span>';
+   const isBest=b&&!o.ref&&!o.stale&&o.source===b.source&&o.price===b.price;
+   return `<tr${o.ref||o.stale?' class=opt':''}><td>${esc(o.source)}${o.via?` <span class="mut small">via ${esc(o.via)}</span>`:''}</td><td>${t}${o.note?`<div class="mut small">${esc(o.note)}</div>`:''}</td>`+
     `<td class=r>${o.price!=null?(o.ref?'約 ':'')+fmt(o.price):'—'}${isBest?' <span class=hit>最低</span>':''}</td><td class=r>${st}</td></tr>`;
   }).join('');
   h+=`<div class=wrap style="margin-top:10px"><table class=offers><thead><tr><th>通路</th><th>商品</th><th class=r>價格</th><th class=r>狀態</th></tr></thead><tbody>${orows||'<tr><td colspan=4 class=mut>沒有資料</td></tr>'}</tbody></table></div>`;
