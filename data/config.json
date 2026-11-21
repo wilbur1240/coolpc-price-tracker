@@ -148,5 +148,77 @@
    "qty": 1,
    "target_price": 2000
   }
+ ],
+ "products": [
+  {
+   "slot": "Bambu Lab P2S",
+   "note": "3D 列印機單機（不含 AMS 的 Combo 版）",
+   "target_price": 20000,
+   "match": [
+    "P2S"
+   ],
+   "exclude": [
+    "零件",
+    "備品",
+    "噴嘴",
+    "鋼板",
+    "熱床",
+    "腳墊",
+    "耗材",
+    "線材",
+    "Guide",
+    "X2D",
+    "H2",
+    "二手",
+    "福利",
+    "拆封",
+    "租"
+   ],
+   "variant_exclude": [
+    "Combo"
+   ],
+   "price_min": 12000,
+   "price_max": 30000,
+   "sources": [
+    {
+     "name": "3DMart（台灣總代理）",
+     "type": "shopify",
+     "url": "https://3dmart.com.tw/products/bambu-lab-p2s-3d-printer-full"
+    },
+    {
+     "name": "Kidendesign 起點設計",
+     "type": "cyberbiz",
+     "url": "https://shop.kidendesign.com/products/bambu-lab-p2s"
+    },
+    {
+     "name": "天馬科技",
+     "type": "cyberbiz",
+     "url": "https://shop.teama.com.tw/products/bambu-lab-p2s-p2s-combo"
+    },
+    {
+     "name": "主要通路（BigGo 比價）",
+     "type": "biggo",
+     "query": "Bambu Lab P2S",
+     "stores": [
+      "momo",
+      "Coupang",
+      "蝦皮商城",
+      "PChome",
+      "萬家福",
+      "順發",
+      "燦坤",
+      "Yahoo"
+     ]
+    },
+    {
+     "name": "Bambu Lab 官方商店（亞洲站）",
+     "type": "bambu_store",
+     "url": "https://asia.store.bambulab.com/products/p2s",
+     "region": "Taiwan",
+     "variant": "P2S",
+     "reference_only": true
+    }
+   ]
+  }
  ]
 }

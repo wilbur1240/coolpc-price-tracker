@@ -1,0 +1,233 @@
+"""Track standalone products (e.g. a 3D printer) across several Taiwan shops.
+
+Each product in config["products"] lists sources; every source yields offers
+[{source, title, price, in_stock, url, ref}]. A failing source is recorded but
+never aborts the run.
+
+Source types:
+  cyberbiz     Cyberbiz shop product page  (<url>.json, Shopify-like)
+  shopify      Shopify product page        (<url>.js)
+  biggo        BigGo search, filtered to the listed major channels
+  bambu_store  Bambu Lab official web store (USD, JSON-LD); reference only
+"""
+from __future__ import annotations
+
+import json
+import re
+import urllib.parse
+
+import requests
+
+from .fetch import UA
+from .match import nz
+
+TIMEOUT = 30
+HEADERS = {"User-Agent": UA, "Accept-Language": "zh-TW,zh;q=0.9,en;q=0.6"}
+
+
+class SourceError(RuntimeError):
+    pass
+
+
+def _get(url: str, accept: str = "text/html,*/*") -> requests.Response:
+    last = None
+    for _ in range(2):
+        try:
+            r = requests.get(url, headers={**HEADERS, "Accept": accept}, timeout=TIMEOUT)
+            if r.status_code == 200:
+                return r
+            last = f"HTTP {r.status_code}"
+        except requests.RequestException as e:
+            last = type(e).__name__
+    raise SourceError(last)
+
+
+# ---------------------------------------------------------------- filters
+
+def title_ok(title: str, prod: dict) -> bool:
+    """Listing/variant title passes the product's match/exclude rules."""
+    n = nz(title)
+    if not all(nz(k) in n for k in prod.get("match", [])):
+        return False
+    if any(nz(k) in n for k in prod.get("exclude", [])):
+        return False
+    return True
+
+
+def variant_ok(title: str, prod: dict) -> bool:
+    """Shop variant title (e.g. 'P2S Combo / 單機') passes variant_exclude."""
+    n = nz(title)
+    return not any(nz(k) in n for k in prod.get("variant_exclude", []))
+
+
+def listing_is_variant_excluded(title: str, prod: dict) -> bool:
+    """A marketplace listing that is *only* an excluded variant, e.g. 'P2S Combo 3D列印機'.
+    Combined listings like 'P2S / P2S Combo' (priced at the base model) are kept."""
+    n = nz(title)
+    for k in prod.get("variant_exclude", []):
+        kk = nz(k)
+        if kk in n:
+            base = n.replace(kk, "")
+            # keep if the base model also appears on its own ("p2s/p2scombo" -> "p2s/p2s")
+            base_kw = [nz(m) for m in prod.get("match", [])]
+            if not any(base.count(b) >= 2 for b in base_kw) and "單機" not in n:
+                return True
+    return False
+
+
+def in_price_range(price: int, prod: dict) -> bool:
+    lo, hi = prod.get("price_min"), prod.get("price_max")
+    return (lo is None or price >= lo) and (hi is None or price <= hi)
+
+
+# ---------------------------------------------------------------- parsers (pure, testable)
+
+def parse_cyberbiz(data: dict, prod: dict, source: str, url: str) -> list[dict]:
+    out = []
+    for v in data.get("variants", []):
+        vt = v.get("title") or ""
+        price = int(round(float(v.get("price") or 0)))
+        if price <= 0 or not variant_ok(vt, prod):
+            continue
+        out.append({"source": source, "title": f"{data.get('title', '')}（{vt}）",
+                    "price": price, "in_stock": bool(v.get("available")), "url": url})
+    return out
+
+
+def parse_shopify_js(data: dict, prod: dict, source: str, url: str) -> list[dict]:
+    out = []
+    for v in data.get("variants", []):
+        vt = v.get("title") or ""
+        price = int(round((v.get("price") or 0) / 100))   # cents
+        if price <= 0 or not variant_ok(vt, prod):
+            continue
+        out.append({"source": source, "title": f"{data.get('title', '')}（{vt}）",
+                    "price": price, "in_stock": bool(v.get("available")), "url": url})
+    return out
+
+
+def biggo_items(html: str) -> list[dict]:
+    """Extract the search result list embedded in BigGo's Next.js flight data."""
+    i = html.find("ssrData")
+    if i < 0:
+        raise SourceError("BigGo: 找不到 ssrData（頁面結構可能改了）")
+    marker = 'self.__next_f.push([1,"'
+    s = html.rfind(marker, 0, i)
+    e = html.find('"])</script>', i)
+    if s < 0 or e < 0:
+        raise SourceError("BigGo: 找不到資料區塊")
+    dec = json.JSONDecoder()
+    lit, _ = dec.raw_decode('"' + html[s + len(marker):e] + '"')
+    j = lit.find('"ssrData":')
+    sd, _ = dec.raw_decode(lit[j + len('"ssrData":'):])
+    return sd.get("list") or []
+
+
+def parse_biggo(items: list[dict], prod: dict, stores: list[str]) -> list[dict]:
+    """Keep listings from whitelisted stores that look like the base product; cheapest per store."""
+    best: dict[str, dict] = {}
+    for it in items:
+        if it.get("is_ad") or it.get("is_offline") or it.get("is_notfound") or it.get("is_expired"):
+            continue
+        store = ((it.get("store") or {}).get("name") or it.get("nindex") or "").strip()
+        if not any(nz(s) in nz(store) for s in stores):
+            continue
+        title, price = it.get("title") or "", int(it.get("price") or 0)
+        if (it.get("currency") or "TWD") != "TWD" or price <= 0:
+            continue
+        if not title_ok(title, prod) or listing_is_variant_excluded(title, prod) or not in_price_range(price, prod):
+            continue
+        offer = {"source": store, "title": title, "price": price, "in_stock": True,
+                 "url": it.get("purl") or "", "via": "BigGo"}
+        if store not in best or price < best[store]["price"]:
+            best[store] = offer
+    return sorted(best.values(), key=lambda o: o["price"])
+
+
+def parse_bambu_store(html: str, region: str, variant: str) -> dict | None:
+    for m in re.findall(r'<script[^>]*application/ld\+json[^>]*>(.*?)</script>', html, re.S):
+        try:
+            j = json.loads(m)
+        except ValueError:
+            continue
+        for v in j.get("hasVariant", []) if isinstance(j, dict) else []:
+            name = v.get("name", "")
+            # "Bambu Lab P2S - P2S / China Taiwan"
+            if region.lower() in name.lower() and f"- {variant} /".lower() in name.lower():
+                o = v.get("offers") or {}
+                return {"name": name, "price": float(o.get("price")), "currency": o.get("priceCurrency", "USD"),
+                        "in_stock": "InStock" in (o.get("availability") or "")}
+    return None
+
+
+# ---------------------------------------------------------------- fetchers
+
+def usd_twd() -> float | None:
+    try:
+        j = requests.get("https://open.er-api.com/v6/latest/USD", timeout=20).json()
+        return float(j["rates"]["TWD"])
+    except (requests.RequestException, ValueError, KeyError, TypeError):
+        return None
+
+
+def fetch_source(src: dict, prod: dict) -> list[dict]:
+    t, name = src["type"], src["name"]
+    if t == "cyberbiz":
+        url = src["url"].split("?")[0]
+        data = _get(url + ".json", "application/json").json()
+        offers = parse_cyberbiz(data, prod, name, url)
+    elif t == "shopify":
+        url = src["url"].split("?")[0]
+        data = _get(url + ".js", "application/json").json()
+        offers = parse_shopify_js(data, prod, name, url)
+    elif t == "biggo":
+        url = "https://biggo.com.tw/s/" + urllib.parse.quote(src["query"]) + "/"
+        offers = parse_biggo(biggo_items(_get(url).text), prod, src.get("stores", []))
+    elif t == "bambu_store":
+        html = _get(src["url"]).text
+        v = parse_bambu_store(html, src.get("region", "Taiwan"), src.get("variant", "P2S"))
+        if not v:
+            raise SourceError("找不到指定地區／款式的價格")
+        rate = usd_twd() if v["currency"] == "USD" else 1.0
+        twd = int(round(v["price"] * rate)) if rate else None
+        cur = "US$" if v["currency"] == "USD" else v["currency"] + " "
+        offers = [{"source": name, "title": f"{v['name']}（{cur}{v['price']:g}）", "price": twd,
+                   "in_stock": v["in_stock"], "url": src["url"], "ref": True,
+                   "note": f"{cur}{v['price']:g}，以匯率 {rate:.2f} 換算，未含運費／關稅" if rate else "匯率取得失敗"}]
+    else:
+        raise SourceError(f"未知的來源類型 {t}")
+    if src.get("reference_only"):
+        for o in offers:
+            o["ref"] = True
+    return offers
+
+
+def track_product(prod: dict) -> dict:
+    """Return a history entry for one product."""
+    offers, errors = [], []
+    for src in prod["sources"]:
+        try:
+            got = fetch_source(src, prod)
+            if not got:
+                errors.append({"source": src["name"], "error": "沒有符合的商品"})
+            offers += got
+        except (SourceError, requests.RequestException, ValueError, KeyError) as e:
+            errors.append({"source": src["name"], "error": str(e) or type(e).__name__})
+    # one row per shop: cheapest in-stock offer, else cheapest
+    per: dict[str, dict] = {}
+    for o in offers:
+        cur = per.get(o["source"])
+        key = (not o["in_stock"], o.get("price") or 10**9)
+        if cur is None or key < (not cur["in_stock"], cur.get("price") or 10**9):
+            per[o["source"]] = o
+    offers = list(per.values())
+    counted = [o for o in offers if not o.get("ref") and o.get("price")]
+    in_stock = [o for o in counted if o["in_stock"]]
+    pool = in_stock or counted
+    best = min(pool, key=lambda o: o["price"]) if pool else None
+    offers.sort(key=lambda o: (o.get("ref", False), o.get("price") or 10**9))
+    return {"best": best, "offers": offers, "errors": errors}
+
+
+def track_all(cfg: dict) -> dict:
+    return {p["slot"]: track_product(p) for p in cfg.get("products", [])}

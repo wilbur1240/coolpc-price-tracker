@@ -1,0 +1,40 @@
+{
+ "title": "拓竹Bambu Lab P2S /P2S Combo 3D列印機",
+ "variants": [
+  {
+   "title": "P2S / 單機",
+   "price": 23500.0,
+   "available": false
+  },
+  {
+   "title": "P2S / 秋季新手包【洽客服】",
+   "price": 24500.0,
+   "available": false
+  },
+  {
+   "title": "P2S / 單機+教育訓練(送PLA*1)【洽客服】",
+   "price": 27500.0,
+   "available": false
+  },
+  {
+   "title": "P2S Combo / 單機",
+   "price": 32500.0,
+   "available": true
+  },
+  {
+   "title": "P2S Combo / 秋季新手包【洽客服】",
+   "price": 33500.0,
+   "available": true
+  },
+  {
+   "title": "P2S Combo / 單機+教育訓練(送PLA*1)【洽客服】",
+   "price": 36500.0,
+   "available": false
+  },
+  {
+   "title": "P2S Combo / 秋季新手包+教育訓練(送PLA*1)【洽客服】",
+   "price": 37500.0,
+   "available": false
+  }
+ ]
+}

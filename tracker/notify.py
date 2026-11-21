@@ -46,6 +46,38 @@ def compute_alerts(cfg: dict, hist: dict, date: str) -> list[str]:
     for s in cur.get("missing", []):
         if prev and prev.get("items", {}).get(s):
             out.append(f"⚠️ {s} 今天找不到符合品項（缺貨或改名？）")
+    out += product_alerts(cfg, hist, date)
+    return out
+
+
+def _best(entry, slot):
+    p = ((entry or {}).get("products") or {}).get(slot) or {}
+    return p.get("best")
+
+
+def product_alerts(cfg: dict, hist: dict, date: str) -> list[str]:
+    out = []
+    cur = hist[date]
+    prev_dates = [d for d in hist if d < date]
+    prev = hist[prev_dates[-1]] if prev_dates else None
+    for prod in cfg.get("products", []):
+        s, tp = prod["slot"], prod.get("target_price")
+        b, pb = _best(cur, s), _best(prev, s)
+        if not b:
+            errs = (((cur.get("products") or {}).get(s) or {}).get("errors")) or []
+            if errs:
+                out.append(f"⚠️ {s} 今天所有價格來源都失敗：" + "；".join(f"{e['source']} {e['error']}" for e in errs))
+            continue
+        if tp is not None and b["price"] <= tp and (pb is None or pb["price"] > tp):
+            out.append(f"🎯 {s} 達到目標價：{fmt(b['price'])} ≤ {fmt(tp)}（{b['source']}）")
+        if pb and pb["price"]:
+            pct = (b["price"] - pb["price"]) / pb["price"] * 100
+            if abs(pct) >= CHANGE_PCT:
+                arrow = "📉 降" if pct < 0 else "📈 漲"
+                out.append(f"{arrow} {s} 最低價 {pct:+.1f}%：{fmt(pb['price'])} → {fmt(b['price'])}（{b['source']}）")
+        past = [_best(h, s)["price"] for d, h in hist.items() if d < date and _best(h, s)]
+        if past and b["price"] < min(past):
+            out.append(f"🏆 {s} 創追蹤以來新低：{fmt(b['price'])}（{b['source']}）")
     return out
 
 
@@ -58,7 +90,15 @@ def daily_summary(cfg: dict, hist: dict, date: str) -> str:
     line = f"今日總價 {fmt(cur['total'])}" + ("（有缺項）" if not cur.get("complete") else "")
     if tgt:
         line += f"，目標 {fmt(tgt)}，差 {fmt(cur['total'] - tgt)}"
-    return f"{line}；{hits}/{n} 已達目標價"
+    line = f"{line}；{hits}/{n} 已達目標價"
+    for prod in cfg.get("products", []):
+        b = _best(cur, prod["slot"])
+        tp = prod.get("target_price")
+        if b:
+            line += f"\n{prod['slot']} 最低 {fmt(b['price'])}（{b['source']}）" + (f"，目標 {fmt(tp)}" if tp else "")
+        else:
+            line += f"\n{prod['slot']} 今天沒有抓到價格"
+    return line
 
 
 def telegram_diagnose():

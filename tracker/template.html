@@ -40,6 +40,9 @@ tr.opt td{background:var(--optbg)}tr.miss td{background:var(--missbg)}
 .ctl{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
 input,select{font:inherit;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--fg);min-width:0}
 #q{flex:1 1 220px}
+h3{font-size:16px;margin:22px 0 4px}
+a.ext{color:var(--acc);text-decoration:none}a.ext:hover{text-decoration:underline}
+.offers td{font-size:14px}.err{margin-top:6px}
 #list td{font-size:14px}#list th.sort{cursor:pointer;user-select:none}
 #more button{font:inherit;margin-left:8px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;padding:3px 10px;cursor:pointer}
 @media(max-width:640px){
@@ -60,6 +63,7 @@ input,select{font:inherit;padding:7px 9px;border:1px solid var(--line);border-ra
 <div class=cards id=cards></div>
 <h2>目標配置 <span class="mut small" id=hits></span></h2>
 <div class=wrap><table id=tgt><thead><tr><th>部件</th><th>今日最便宜的符合品項</th><th class=r>數量</th><th class=r>單價</th><th class=r>較前次</th><th class=r>歷史最低</th><th class=r>目標價</th></tr></thead><tbody></tbody></table></div>
+<div id=prodSec></div>
 <h2>總價走勢</h2>
 <div class=panel id=totalChart></div>
 <h2>部件單價走勢</h2>
@@ -140,6 +144,36 @@ tb.innerHTML=cfg.items.map(it=>{
 }).join('');
 tb.querySelectorAll('tr').forEach(tr=>tr.onclick=()=>{pick(tr.dataset.s);$('itemChart').scrollIntoView({behavior:'smooth',block:'center'});});
 
+// other products (multi-shop)
+const prods=cfg.products||[];
+const safeUrl=u=>/^https?:\/\//i.test(u||'')?u:'';
+const pbest=(d,s)=>{const P=d&&d.products&&d.products[s];return P&&P.best?P.best:null;};
+if(prods.length){
+ let h='<h2>其他追蹤商品</h2>';
+ prods.forEach((p,pi)=>{
+  const s=p.slot,P=(cur.products||{})[s]||{offers:[],errors:[]},b=P.best,pb=pbest(prev,s);
+  const lows=dates.map(d=>pbest(H[d],s)).filter(Boolean).map(x=>x.price);
+  const tp=p.target_price,hit=!!(b&&tp!=null&&b.price<=tp);
+  h+=`<h3>${esc(s)} <span class="mut small" style="font-weight:400">${esc(p.note||'')}</span></h3>`;
+  h+='<div class=cards style="margin-top:8px">'+
+   card('今日最低價',b?'NT$ '+fmt(b.price):'—',b?`<div class="mut small">${esc(b.source)}${b.in_stock?'':'（缺貨）'}</div>`:'<div class="up small">今天沒有抓到價格</div>')+
+   card('較前次',delta(b?b.price:null,pb?pb.price:null))+
+   card('目標價',tp!=null?(hit?`<span class=hit>✓ ${fmt(tp)}</span>`:'NT$ '+fmt(tp)):'—',b&&tp!=null?`<div class="${hit?'dn':'up'} small">${hit?'已低於目標 ':'還差 '}${fmt(Math.abs(b.price-tp))}</div>`:'')+
+   card('追蹤以來最低',lows.length?'NT$ '+fmt(Math.min(...lows)):'—')+'</div>';
+  const orows=(P.offers||[]).map(o=>{
+   const u=safeUrl(o.url),t=u?`<a class=ext href="${esc(u)}" target=_blank rel="noopener nofollow">${esc(o.title)}</a>`:esc(o.title);
+   const st=o.ref?'<span class=badge>參考</span>':o.in_stock?'<span class=dn>有貨</span>':'<span class=up>缺貨</span>';
+   const isBest=b&&!o.ref&&o.source===b.source&&o.price===b.price;
+   return `<tr${o.ref?' class=opt':''}><td>${esc(o.source)}${o.via?` <span class="mut small">via ${esc(o.via)}</span>`:''}</td><td>${t}${o.note?`<div class="mut small">${esc(o.note)}</div>`:''}</td>`+
+    `<td class=r>${o.price!=null?(o.ref?'約 ':'')+fmt(o.price):'—'}${isBest?' <span class=hit>最低</span>':''}</td><td class=r>${st}</td></tr>`;
+  }).join('');
+  h+=`<div class=wrap style="margin-top:10px"><table class=offers><thead><tr><th>通路</th><th>商品</th><th class=r>價格</th><th class=r>狀態</th></tr></thead><tbody>${orows||'<tr><td colspan=4 class=mut>沒有資料</td></tr>'}</tbody></table></div>`;
+  if((P.errors||[]).length)h+=`<div class="err up small">無法取得：${P.errors.map(e=>esc(e.source)+'（'+esc(e.error)+'）').join('、')}</div>`;
+  h+=`<div class="mut small" style="margin:12px 0 4px">最低價走勢（不含「參考」）</div><div class=panel id=pc${pi}></div>`;
+ });
+ $('prodSec').innerHTML=h;
+}
+
 // charts
 function chart(el,pts,target,emptyMsg){
  if(!pts.length){el.innerHTML=`<p class=mut>${emptyMsg}</p>`;return;}
@@ -157,6 +191,7 @@ function chart(el,pts,target,emptyMsg){
  const xl=`<text x=${X(0).toFixed(1)} y=${Hh-8} text-anchor=${pts.length===1?'middle':'start'}>${pts[0].d}</text>`+(pts.length>1?`<text x=${W-R} y=${Hh-8} text-anchor=end>${pts[pts.length-1].d}</text>`:'');
  el.innerHTML=`<svg class=chart viewBox="0 0 ${W} ${Hh}" role=img>${g}${pts.length>1?`<polyline class=ln points="${line}"/>`:''}${dots}${xl}</svg>`+(pts.length===1?'<div class="mut small">目前只有一天的資料，累積更多天後會連成走勢線。</div>':'');
 }
+prods.forEach((p,pi)=>chart($('pc'+pi),dates.filter(d=>pbest(H[d],p.slot)).map(d=>({d,v:pbest(H[d],p.slot).price})),p.target_price,'還沒有價格紀錄。'));
 chart($('totalChart'),dates.filter(d=>H[d].complete).map(d=>({d,v:H[d].total})),tgt,'還沒有完整（無缺項）的資料。');
 
 $('chips').innerHTML=cfg.items.map(it=>`<button type=button data-s="${esc(it.slot)}">${esc(it.slot)}</button>`).join('');

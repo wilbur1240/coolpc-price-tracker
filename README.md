@@ -49,6 +49,34 @@ GitHub 的排程 cron 常延遲 5～30 分鐘，這是正常現象。
 - **用規格找最便宜的**：`match` 不一定要寫型號，例如 SSD 可以寫 `["2TB", "TLC", "Gen4"]`，就會挑同規格裡最便宜的。
 - 找不到符合品項時，該部件顯示「缺項」，當天總價標為不完整，不計入總價走勢。
 
+## 其他追蹤商品（多通路比價）
+
+除了原價屋配置，`config.json` 的 `products` 可以追蹤其他商品在多個通路的價格，例如 Bambu Lab P2S。網頁會多一個「其他追蹤商品」區塊，顯示今日最低價、漲跌、目標價、各通路報價，以及最低價走勢。
+
+```jsonc
+"products": [{
+  "slot": "Bambu Lab P2S",
+  "target_price": 20000,
+  "match": ["P2S"],                    // 通路商品名稱必須包含
+  "exclude": ["噴嘴", "二手", ...],     // 配件、二手等排除
+  "variant_exclude": ["Combo"],        // 排除 Combo 款式（只追蹤單機）
+  "price_min": 12000, "price_max": 30000,  // 價格合理範圍，用來濾掉配件和 Combo
+  "sources": [ ... ]
+}]
+```
+
+| 來源類型 | 說明 |
+|---|---|
+| `shopify` | Shopify 商店的商品頁（讀 `<網址>.js`），例如 3DMart 台灣總代理 |
+| `cyberbiz` | Cyberbiz 商店的商品頁（讀 `<網址>.json`），例如 Kidendesign、天馬科技 |
+| `biggo` | BigGo 比價搜尋，只保留 `stores` 裡列出的主要通路（momo、Coupang、蝦皮商城、PChome、萬家福、順發、燦坤、Yahoo），每個通路取最便宜的一筆 |
+| `bambu_store` | Bambu Lab 官方商店（美元標價），用匯率換算成台幣；設 `reference_only`，只列出參考、不計入最低價 |
+
+- **最低價**：只從有貨的通路中挑選。如果全部缺貨，就取最便宜的那筆並標示「缺貨」。
+- **momo、Coupang 直接連會被擋**（HTTP 403），所以透過 BigGo 取得它們的價格。BigGo 的資料可能比通路頁面晚幾小時更新。
+- **單一來源失敗**不會中斷整次執行，網頁會列出哪些來源失敗。只有全部來源都失敗時才會發通知。
+- **通知規則**：新達到目標價、最低價較前一次漲跌 ≥ 5%、創追蹤以來新低。每日摘要也會附上最低價。
+
 ## 手動觸發
 
 - 網頁：repo → **Actions** → **daily price check** → **Run workflow**

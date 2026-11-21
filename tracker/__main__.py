@@ -10,6 +10,7 @@ from . import notify, store
 from .fetch import FetchError, decode, fetch
 from .match import in_category, match_config
 from .parse import category_counts, parse_html, parse_pipe_txt
+from .products import track_all
 from .render import render
 
 MIN_ROWS = 1000
@@ -64,6 +65,14 @@ def cmd_run(args) -> int:
     entry = match_config(cfg, rows)
     entry["count"] = len(rows)
     old = hist.get(date, {})
+    if cfg.get("products") and not args.skip_products:
+        entry["products"] = track_all(cfg)
+        for slot, p in entry["products"].items():
+            b = p["best"]
+            print(f"[products] {slot}: " + (f"最低 {b['price']:,}（{b['source']}）" if b else "沒有價格")
+                  + f"，{len(p['offers'])} 個來源有價格" + (f"，失敗：{', '.join(e['source'] for e in p['errors'])}" if p["errors"] else ""))
+    elif old.get("products"):
+        entry["products"] = old["products"]
     hist[date] = entry
 
     alerts = notify.compute_alerts(cfg, hist, date)
@@ -85,7 +94,7 @@ def cmd_run(args) -> int:
             print("[run] 今天已送過相同通知，略過")
         else:
             body = "\n".join(alerts + [summary]) if alerts else summary
-            if notify.send(f"原價屋：{cfg.get('build_name', '目標配置')}", body,
+            if notify.send(f"價格追蹤：{cfg.get('build_name', '目標配置')}", body,
                            priority="high" if alerts else "low", tags="moneybag"):
                 sent_alerts = alerts
     entry["alerts"] = alerts
@@ -124,6 +133,7 @@ def main(argv=None) -> int:
     r.add_argument("--save-raw", help="把下載的原始 HTML 存到這個路徑（除錯用）")
     r.add_argument("--date", help="資料日期 YYYY-MM-DD（預設今天，台北時間）")
     r.add_argument("--no-notify", action="store_true", help="不發通知")
+    r.add_argument("--skip-products", action="store_true", help="不抓 config.products（其他商品）的價格")
     r.add_argument("--dry-run", action="store_true", help="只印結果，不寫檔、不通知")
     r.set_defaults(fn=cmd_run)
     sub.add_parser("render", help="用現有資料重新產生 docs/index.html").set_defaults(fn=cmd_render)
