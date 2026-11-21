@@ -70,9 +70,10 @@ GitHub 的排程 cron 常延遲 5～30 分鐘，這是正常現象。
 | `shopify` | Shopify 商店的商品頁（讀 `<網址>.js`），例如 3DMart 台灣總代理 |
 | `cyberbiz` | Cyberbiz 商店的商品頁（讀 `<網址>.json`），例如 Kidendesign、天馬科技 |
 | `biggo` | BigGo 比價搜尋，只保留 `stores` 裡列出的主要通路（momo、Coupang、蝦皮商城、PChome、萬家福、順發、燦坤、Yahoo），每個通路取最便宜的一筆 |
-| `bambu_store` | Bambu Lab 官方商店（美元標價），用匯率換算成台幣；設 `reference_only`，只列出參考、不計入最低價 |
+| `bambu_store` | Bambu Lab 官方商店（美元標價），用匯率換算成台幣；設 `reference_only`，只列出參考、不計入最低價。**GitHub runner 在美國，會被導到美國官網、拿不到台灣價格**，所以預設沒有啟用，只適合在台灣 IP 的機器上跑 |
 
 - **最低價**：只從有貨的通路中挑選。如果全部缺貨，就取最便宜的那筆並標示「缺貨」。
+- **各來源在不同 IP 的狀況不同**（2026-11-21 實測）：3DMart 擋台灣家用 IP（429）但 GitHub runner 可以抓；BigGo 在 runner 上偶爾回 429，程式會等 20～40 秒再重試。
 - **momo、Coupang 直接連會被擋**（HTTP 403），所以透過 BigGo 取得它們的價格。BigGo 的資料可能比通路頁面晚幾小時更新。
 - **單一來源失敗**不會中斷整次執行，網頁會列出哪些來源失敗。只有全部來源都失敗時才會發通知。
 - **通知規則**：新達到目標價、最低價較前一次漲跌 ≥ 5%、創追蹤以來新低。每日摘要也會附上最低價。
