@@ -505,7 +505,7 @@
     "errors": [
      {
       "source": "Bambu Lab 官方商店（亞洲站）",
-      "error": "找不到 Taiwan 的價格（實際網址 https://us.store.bambulab.com/products/p2s，地區 []）"
+      "error": "找不到 Taiwan 的價格（實際網址 https://us.store.bambulab.com/products/p2s?region=China+Taiwan，地區 []）"
      }
     ]
    }
