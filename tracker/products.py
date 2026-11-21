@@ -30,15 +30,20 @@ class SourceError(RuntimeError):
 
 
 def _get(url: str, accept: str = "text/html,*/*") -> requests.Response:
+    import time
     last = None
-    for _ in range(2):
+    for attempt in range(3):
         try:
             r = requests.get(url, headers={**HEADERS, "Accept": accept}, timeout=TIMEOUT)
             if r.status_code == 200:
                 return r
             last = f"HTTP {r.status_code}"
+            if r.status_code not in (429, 500, 502, 503, 504):
+                break
         except requests.RequestException as e:
             last = type(e).__name__
+        if attempt < 2:
+            time.sleep(20 * (attempt + 1))
     raise SourceError(last)
 
 
@@ -184,10 +189,11 @@ def fetch_source(src: dict, prod: dict) -> list[dict]:
         url = "https://biggo.com.tw/s/" + urllib.parse.quote(src["query"]) + "/"
         offers = parse_biggo(biggo_items(_get(url).text), prod, src.get("stores", []))
     elif t == "bambu_store":
-        html = _get(src["url"]).text
-        v = parse_bambu_store(html, src.get("region", "Taiwan"), src.get("variant", "P2S"))
+        r = _get(src["url"])
+        v = parse_bambu_store(r.text, src.get("region", "Taiwan"), src.get("variant", "P2S"))
         if not v:
-            raise SourceError("找不到指定地區／款式的價格")
+            regions = sorted(set(re.findall(r'"name":\s*"Bambu Lab [^"/]+/\s*([^"]+)"', r.text)))[:8]
+            raise SourceError(f"找不到 {src.get('region', 'Taiwan')} 的價格（實際網址 {r.url}，地區 {regions}）")
         rate = usd_twd() if v["currency"] == "USD" else 1.0
         twd = int(round(v["price"] * rate)) if rate else None
         cur = "US$" if v["currency"] == "USD" else v["currency"] + " "
