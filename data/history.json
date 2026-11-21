@@ -437,7 +437,8 @@
      "title": "拓竹 Bambu Lab P2S 3D列印機系列（P2S）",
      "price": 23500,
      "in_stock": true,
-     "url": "https://3dmart.com.tw/products/bambu-lab-p2s-3d-printer-full"
+     "url": "https://3dmart.com.tw/products/bambu-lab-p2s-3d-printer-full",
+     "group": "3DMart（台灣總代理）"
     },
     "offers": [
      {
@@ -445,29 +446,72 @@
       "title": "拓竹 Bambu Lab P2S 3D列印機系列（P2S）",
       "price": 23500,
       "in_stock": true,
-      "url": "https://3dmart.com.tw/products/bambu-lab-p2s-3d-printer-full"
+      "url": "https://3dmart.com.tw/products/bambu-lab-p2s-3d-printer-full",
+      "group": "3DMart（台灣總代理）"
      },
      {
       "source": "Kidendesign 起點設計",
       "title": "拓竹Bambu Lab P2S /P2S Combo 3D列印機（P2S / 單機）",
       "price": 23500,
       "in_stock": false,
-      "url": "https://shop.kidendesign.com/products/bambu-lab-p2s"
+      "url": "https://shop.kidendesign.com/products/bambu-lab-p2s",
+      "group": "Kidendesign 起點設計"
      },
      {
       "source": "天馬科技",
       "title": "拓竹Bambu Lab P2S /P2S Combo 3D列印機（P2S）",
       "price": 23500,
       "in_stock": true,
-      "url": "https://shop.teama.com.tw/products/bambu-lab-p2s-p2s-combo"
+      "url": "https://shop.teama.com.tw/products/bambu-lab-p2s-p2s-combo",
+      "group": "天馬科技"
+     },
+     {
+      "source": "萬家福線上購物",
+      "title": "[拓竹Bambu Lab ]P2S 3D列印機",
+      "price": 23500,
+      "in_stock": true,
+      "url": "https://online.uni-prosperity.com.tw/zh/%E6%8B%93%E7%AB%B9/A504021651301.html",
+      "via": "BigGo",
+      "group": "主要通路（BigGo 比價）"
+     },
+     {
+      "source": "順發線上購物",
+      "title": "(客訂品)Bambu Lab P2S 3D列印機",
+      "price": 23500,
+      "in_stock": true,
+      "url": "https://www.isunfar.com.tw/product/?prodseq=380C03",
+      "via": "BigGo",
+      "group": "主要通路（BigGo 比價）"
+     },
+     {
+      "source": "momo購物網",
+      "title": "【Bambu Lab】【領券再折】P2S/P2S Combo 3D列印機 廠商配送",
+      "price": 23500,
+      "in_stock": true,
+      "url": "https://www.momoshop.com.tw/TP/TP0005634/goodsDetail/TP00056340007789",
+      "via": "BigGo",
+      "group": "主要通路（BigGo 比價）"
+     },
+     {
+      "source": "酷澎 Coupang",
+      "title": "Bambu Lab 拓竹 P2S / P2S Combo 3D 列印機 - 高速靜穩專業級 單機",
+      "price": 24500,
+      "in_stock": true,
+      "url": "https://coupang.onelink.me/yowQ?pageKey=679015396163587&ctag=679015396163587&itemId=646526782980164&vendorItemId=646526783078437&pid=coupang_partners&c=AF8782393&is_retargeting=true&af_reengagement_window=7d&af_c_id=AF8782393&af_sub5=TWAFSDP&af_click_lookback=7d&deep_link_value=coupang%3A%2F%2Fproduct%3FpId%3D679015396163587%26itemId%3D646526782980164%26vendorItemId%3D646526783078437&af_r=https%3A%2F%2Flink.tw.coupang.com%2Fre2%2FTWAFSDP%3Flptag%3DAF8782393",
+      "via": "BigGo",
+      "group": "主要通路（BigGo 比價）"
+     },
+     {
+      "source": "蝦皮商城",
+      "title": "Bambu Lab P2S 3D列印機 廠商配送",
+      "price": 24500,
+      "in_stock": true,
+      "url": "https://shopee.tw/product/116026822/46612375953",
+      "via": "BigGo",
+      "group": "主要通路（BigGo 比價）"
      }
     ],
-    "errors": [
-     {
-      "source": "主要通路（BigGo 比價）",
-      "error": "ConnectTimeout"
-     }
-    ]
+    "errors": []
    }
   },
   "alerts": [],
