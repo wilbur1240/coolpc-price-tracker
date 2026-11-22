@@ -516,5 +516,196 @@
   },
   "alerts": [],
   "alerts_sent": []
+ },
+ "2026-11-22": {
+  "items": {
+   "CPU": {
+    "name": "｛AMD R7 9700X｝代理盒裝【8核/16緒】3.8G(↑5.5G)65W /具RDNA內顯",
+    "price": 11550,
+    "qty": 1,
+    "alts": 0,
+    "cat": "處理器 CPU"
+   },
+   "GPU": {
+    "name": "｛華碩 DUAL-RTX5060TI-O16G｝2632MHz/23cm/雙風扇/註冊四年保固",
+    "price": 25590,
+    "qty": 1,
+    "alts": 14,
+    "cat": "顯示卡VGA"
+   },
+   "GPU 升級": {
+    "name": "限搭機｛華碩 PRIME-RTX5070TI-O16G｝2527MHz/31cm/三風扇/註五年",
+    "price": 45990,
+    "qty": 1,
+    "alts": 8,
+    "cat": "顯示卡VGA"
+   },
+   "主機板": {
+    "name": "｛微星 MAG B850 TOMAHAWK MAX WIFI II｝/ATX/5G+Wi-Fi7/註五年/14+2+1相",
+    "price": 8390,
+    "qty": 1,
+    "alts": 0,
+    "cat": "主機板 MB"
+   },
+   "RAM 64GB": {
+    "name": "美光｛Micron Crucial 64GB(雙通32GB*2) DDR5 5600｝/CL46(原生顆粒)",
+    "price": 29999,
+    "qty": 1,
+    "alts": 36,
+    "cat": "記憶體 RAM"
+   },
+   "SSD 2TB": {
+    "name": "WD 黑標｛SN850X 2TB｝/Gen4 PCIe 4.0/讀7300/寫6600/TLC/電競級【五年保】",
+    "price": 12111,
+    "qty": 1,
+    "alts": 0,
+    "cat": "固態硬碟 M.2｜SSD"
+   },
+   "PSU 850W": {
+    "name": "｛XPG CORE SHIFT II VE 850W｝雙8/金牌/直出線/ATX3.1(PCIe 5.1)/5年保",
+    "price": 2390,
+    "qty": 1,
+    "alts": 49,
+    "cat": "電源供應器"
+   },
+   "散熱器": {
+    "name": "｛利民 Phantom Spirit 120｝7導管(6mm)/雙塔雙扇/高15.7cm/陽極黑上蓋【WXZ】",
+    "price": 1490,
+    "qty": 1,
+    "alts": 0,
+    "cat": "散熱器｜散熱墊｜散熱膏"
+   },
+   "機殼": {
+    "name": "｛Fractal Design Pop 2 Air RGB 黑｝顯卡長41.6/CPU高17.5/玻璃透側/ATX(POA2A-03)",
+    "price": 3690,
+    "qty": 1,
+    "alts": 1,
+    "cat": "CASE 機殼(+電源)"
+   }
+  },
+  "total": 95210,
+  "complete": true,
+  "missing": [],
+  "cat_min": {
+   "CPU": {
+    "min": 2099,
+    "count": 42
+   },
+   "主機板": {
+    "min": 1650,
+    "count": 349
+   },
+   "記憶體": {
+    "min": 780,
+    "count": 191
+   },
+   "SSD": {
+    "min": 1111,
+    "count": 159
+   },
+   "顯示卡": {
+    "min": 190,
+    "count": 201
+   },
+   "電源供應器": {
+    "min": 1090,
+    "count": 337
+   },
+   "散熱器": {
+    "min": 1,
+    "count": 185
+   },
+   "CASE": {
+    "min": 790,
+    "count": 721
+   }
+  },
+  "count": 6605,
+  "products": {
+   "Bambu Lab P2S": {
+    "best": {
+     "source": "3DMart（台灣總代理）",
+     "title": "拓竹 Bambu Lab P2S 3D列印機系列（P2S）",
+     "price": 23500,
+     "in_stock": true,
+     "url": "https://3dmart.com.tw/products/bambu-lab-p2s-3d-printer-full",
+     "group": "3DMart（台灣總代理）"
+    },
+    "offers": [
+     {
+      "source": "3DMart（台灣總代理）",
+      "title": "拓竹 Bambu Lab P2S 3D列印機系列（P2S）",
+      "price": 23500,
+      "in_stock": true,
+      "url": "https://3dmart.com.tw/products/bambu-lab-p2s-3d-printer-full",
+      "group": "3DMart（台灣總代理）"
+     },
+     {
+      "source": "Kidendesign 起點設計",
+      "title": "拓竹Bambu Lab P2S /P2S Combo 3D列印機（P2S / 單機）",
+      "price": 23500,
+      "in_stock": false,
+      "url": "https://shop.kidendesign.com/products/bambu-lab-p2s",
+      "group": "Kidendesign 起點設計"
+     },
+     {
+      "source": "天馬科技",
+      "title": "拓竹Bambu Lab P2S /P2S Combo 3D列印機（P2S）",
+      "price": 23500,
+      "in_stock": true,
+      "url": "https://shop.teama.com.tw/products/bambu-lab-p2s-p2s-combo",
+      "group": "天馬科技"
+     },
+     {
+      "source": "萬家福線上購物",
+      "title": "[拓竹Bambu Lab ]P2S 3D列印機",
+      "price": 23500,
+      "in_stock": true,
+      "url": "https://online.uni-prosperity.com.tw/zh/%E6%8B%93%E7%AB%B9/A504021651301.html",
+      "via": "BigGo",
+      "group": "主要通路（BigGo 比價）"
+     },
+     {
+      "source": "順發線上購物",
+      "title": "(客訂品)Bambu Lab P2S 3D列印機",
+      "price": 23500,
+      "in_stock": true,
+      "url": "https://www.isunfar.com.tw/product/?prodseq=380C03",
+      "via": "BigGo",
+      "group": "主要通路（BigGo 比價）"
+     },
+     {
+      "source": "momo購物網",
+      "title": "【Bambu Lab】【領券再折】P2S/P2S Combo 3D列印機 廠商配送",
+      "price": 23500,
+      "in_stock": true,
+      "url": "https://www.momoshop.com.tw/TP/TP0005634/goodsDetail/TP00056340007789",
+      "via": "BigGo",
+      "group": "主要通路（BigGo 比價）"
+     },
+     {
+      "source": "酷澎 Coupang",
+      "title": "Bambu Lab 拓竹 P2S / P2S Combo 3D 列印機 - 高速靜穩專業級 單機",
+      "price": 24500,
+      "in_stock": true,
+      "url": "https://coupang.onelink.me/yowQ?pageKey=679015396163587&ctag=679015396163587&itemId=646526782980164&vendorItemId=646526783078437&pid=coupang_partners&c=AF8782393&is_retargeting=true&af_reengagement_window=7d&af_c_id=AF8782393&af_sub5=TWAFSDP&af_click_lookback=7d&deep_link_value=coupang%3A%2F%2Fproduct%3FpId%3D679015396163587%26itemId%3D646526782980164%26vendorItemId%3D646526783078437&af_r=https%3A%2F%2Flink.tw.coupang.com%2Fre2%2FTWAFSDP%3Flptag%3DAF8782393",
+      "via": "BigGo",
+      "group": "主要通路（BigGo 比價）"
+     },
+     {
+      "source": "蝦皮商城",
+      "title": "Bambu Lab P2S 3D列印機 廠商配送",
+      "price": 24500,
+      "in_stock": true,
+      "url": "https://shopee.tw/product/116026822/46612375953",
+      "via": "BigGo",
+      "group": "主要通路（BigGo 比價）"
+     }
+    ],
+    "errors": []
+   }
+  },
+  "alerts": [],
+  "alerts_sent": []
  }
 }
