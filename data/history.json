@@ -1197,22 +1197,14 @@
   "products": {
    "Bambu Lab P2S": {
     "best": {
-     "source": "3DMart（台灣總代理）",
-     "title": "拓竹 Bambu Lab P2S 3D列印機系列（P2S）",
+     "source": "天馬科技",
+     "title": "拓竹Bambu Lab P2S /P2S Combo 3D列印機（P2S）",
      "price": 23500,
      "in_stock": true,
-     "url": "https://3dmart.com.tw/products/bambu-lab-p2s-3d-printer-full",
-     "group": "3DMart（台灣總代理）"
+     "url": "https://shop.teama.com.tw/products/bambu-lab-p2s-p2s-combo",
+     "group": "天馬科技"
     },
     "offers": [
-     {
-      "source": "3DMart（台灣總代理）",
-      "title": "拓竹 Bambu Lab P2S 3D列印機系列（P2S）",
-      "price": 23500,
-      "in_stock": true,
-      "url": "https://3dmart.com.tw/products/bambu-lab-p2s-3d-printer-full",
-      "group": "3DMart（台灣總代理）"
-     },
      {
       "source": "Kidendesign 起點設計",
       "title": "拓竹Bambu Lab P2S /P2S Combo 3D列印機（P2S / 單機）",
@@ -1273,9 +1265,23 @@
       "url": "https://shopee.tw/product/116026822/46612375953",
       "via": "BigGo",
       "group": "主要通路（BigGo 比價）"
+     },
+     {
+      "source": "3DMart（台灣總代理）",
+      "title": "拓竹 Bambu Lab P2S 3D列印機系列（P2S）",
+      "price": 23500,
+      "in_stock": true,
+      "url": "https://3dmart.com.tw/products/bambu-lab-p2s-3d-printer-full",
+      "group": "3DMart（台灣總代理）",
+      "stale": "2026-11-25"
      }
     ],
-    "errors": []
+    "errors": [
+     {
+      "source": "3DMart（台灣總代理）",
+      "error": "HTTP 429"
+     }
+    ]
    },
    "ELEGOO Centauri Carbon 2": {
     "best": null,
@@ -1283,7 +1289,8 @@
     "errors": [
      {
       "source": "3D列印基地站",
-      "error": "HTTP 202"
+      "error": "沒有符合的商品（可能沒賣這個版本）",
+      "nomatch": true
      },
      {
       "source": "主要通路（BigGo 比價）",
@@ -1296,7 +1303,12 @@
   "chains": {
    "items": {
     "CPU": {
-     "順發": null,
+     "順發": {
+      "title": "AMD R7-9700X 3.8GHz 8核16緒/內顯/無風扇",
+      "price": 11550,
+      "in_stock": true,
+      "url": "https://www.isunfar.com.tw/product/?prodseq=251001"
+     },
      "PChome 24h": {
       "title": "AMD 超微 Ryzen 7 9700X 8核/16緒 處理器《3.8GHz/40M/65W/AM5》(代理商貨)",
       "price": 11550,
@@ -1309,7 +1321,12 @@
      }
     },
     "GPU": {
-     "順發": null,
+     "順發": {
+      "title": "MSI RTX5060Ti 16G SHADOW 2X OC PLUS 顯示卡-上網註冊4年保固",
+      "price": 28990,
+      "in_stock": false,
+      "url": "https://www.isunfar.com.tw/product/?prodseq=202M93"
+     },
      "PChome 24h": {
       "title": "ASUS 華碩 Dual GeForce RTX 5060 Ti 16GB GDDR7 OC 超頻版 顯示卡",
       "price": 25590,
@@ -1322,7 +1339,12 @@
      }
     },
     "GPU 升級": {
-     "順發": null,
+     "順發": {
+      "title": "MSI RTX5070Ti 16G VENTUS 3X -上網註冊4年保固",
+      "price": 31990,
+      "in_stock": false,
+      "url": "https://www.isunfar.com.tw/product/?prodseq=202M59"
+     },
      "PChome 24h": {
       "title": "MSI 微星 GeForce RTX 5070 Ti 16G SHADOW 3X OC 顯示卡",
       "price": 47990,
@@ -1348,7 +1370,12 @@
      }
     },
     "RAM 64GB": {
-     "順發": null,
+     "順發": {
+      "title": "Kingston 金士頓FURY Beast 獸獵者 DDR5 6000 64GB(32GBx2)白色/ 超頻/具XMP/EXPO 桌上型超頻記憶體",
+      "price": 41500,
+      "in_stock": true,
+      "url": "https://www.isunfar.com.tw/product/?prodseq=252K93"
+     },
      "PChome 24h": {
       "title": "Micron 美光 PRO DDR5-6000 64G(32G*2) CL40 超頻 桌上型記憶體《白》(支援XMP/EXPO)",
       "price": 31499,
@@ -1374,7 +1401,12 @@
      }
     },
     "PSU 850W": {
-     "順發": null,
+     "順發": {
+      "title": "(客訂品)保銳  CyberG II 850W 金牌/直出扁線/ATX3.1(PCIe 5.1)/全日系/7年保 電源供應器",
+      "price": 2390,
+      "in_stock": true,
+      "url": "https://www.isunfar.com.tw/product/?prodseq=290B02"
+     },
      "PChome 24h": {
       "title": "MONTECH GAMMA 3 850W 80Plus 金牌 ATX 3.1(PCIe 5.1) 電源供應器",
       "price": 2449,
@@ -1387,7 +1419,12 @@
      }
     },
     "散熱器": {
-     "順發": null,
+     "順發": {
+      "title": " Phantom Spirit 120 CPU 散熱器 PS120",
+      "price": 1490,
+      "in_stock": false,
+      "url": "https://www.isunfar.com.tw/product/?prodseq=293002"
+     },
      "PChome 24h": {
       "title": "Thermalright 利民 Phantom Spirit 120 7導管 280W 散熱器(高15.7)",
       "price": 1490,
@@ -1412,48 +1449,8 @@
    "errors": [
     {
      "store": "順發",
-     "slot": "CPU",
-     "error": "ConnectTimeout"
-    },
-    {
-     "store": "順發",
-     "slot": "GPU",
-     "error": "ConnectTimeout"
-    },
-    {
-     "store": "順發",
-     "slot": "GPU 升級",
-     "error": "連續失敗，今天略過"
-    },
-    {
-     "store": "順發",
-     "slot": "主機板",
-     "error": "連續失敗，今天略過"
-    },
-    {
-     "store": "順發",
-     "slot": "RAM 64GB",
-     "error": "連續失敗，今天略過"
-    },
-    {
-     "store": "順發",
-     "slot": "SSD 2TB",
-     "error": "連續失敗，今天略過"
-    },
-    {
-     "store": "順發",
-     "slot": "PSU 850W",
-     "error": "連續失敗，今天略過"
-    },
-    {
-     "store": "順發",
-     "slot": "散熱器",
-     "error": "連續失敗，今天略過"
-    },
-    {
-     "store": "順發",
      "slot": "機殼",
-     "error": "連續失敗，今天略過"
+     "error": "ConnectTimeout"
     }
    ],
    "totals": {
@@ -1466,8 +1463,6 @@
     "mix": 95069
    }
   },
-  "alerts": [
-   "⚠️ ELEGOO Centauri Carbon 2 今天所有價格來源都失敗：3D列印基地站 HTTP 202"
-  ]
+  "alerts": []
  }
 }
