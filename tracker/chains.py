@@ -97,10 +97,15 @@ def pick(listings: list[dict], item: dict, chains_cfg: dict, coolpc_price: int |
     return min(ok, key=lambda l: (not l.get("in_stock", True), l["price"]))
 
 
-def compare(cfg: dict, coolpc_items: dict, delay: float = 1.0) -> dict:
-    """Return {"items": {slot: {store: offer|None}}, "errors": [{store, slot, error}]}."""
+def compare(cfg: dict, coolpc_items: dict, delay: float = 1.0, budget: float = 360.0) -> dict:
+    """Return {"items": {slot: {store: offer|None}}, "errors": [{store, slot, error}]}.
+
+    A store that fails twice in a row is skipped for the rest of the run, and the whole
+    comparison stops after `budget` seconds, so a blocked store can't stall the daily job."""
     ch = cfg.get("chains") or {}
     out = {"items": {}, "errors": []}
+    start = time.time()
+    fails: dict[str, int] = {}
     for it in cfg["items"]:
         if not it.get("search"):
             continue
@@ -108,17 +113,29 @@ def compare(cfg: dict, coolpc_items: dict, delay: float = 1.0) -> dict:
         cp = (coolpc_items.get(slot) or {}).get("price")
         out["items"][slot] = {}
         for st in ch.get("stores", []):
+            name = st["name"]
             q = it["search"]
             if isinstance(q, dict):          # {"*": default query, "<store type>": override}
                 q = q.get(st["type"], q.get("*"))
             if not q:
                 continue
+            out["items"][slot][name] = None
+            if fails.get(name, 0) >= 2:
+                out["errors"].append({"store": name, "slot": slot, "error": "連續失敗，今天略過"})
+                continue
+            if time.time() - start > budget:
+                out["errors"].append({"store": name, "slot": slot, "error": "比價時間用盡，略過"})
+                continue
+            t0 = time.time()
             try:
-                o = pick(search_store(st["type"], q), it, ch, cp)
-                out["items"][slot][st["name"]] = o
+                out["items"][slot][name] = pick(search_store(st["type"], q), it, ch, cp)
+                fails[name] = 0
+                print(f"    [chains] {name:10s} {slot:10s} {time.time() - t0:5.1f}s ok", flush=True)
             except (SourceError, requests.RequestException, ValueError, KeyError) as e:
-                out["items"][slot][st["name"]] = None
-                out["errors"].append({"store": st["name"], "slot": slot, "error": str(e) or type(e).__name__})
+                fails[name] = fails.get(name, 0) + 1
+                err = str(e) or type(e).__name__
+                out["errors"].append({"store": name, "slot": slot, "error": err})
+                print(f"    [chains] {name:10s} {slot:10s} {time.time() - t0:5.1f}s FAIL {err}", flush=True)
             time.sleep(delay)
     return out
 
