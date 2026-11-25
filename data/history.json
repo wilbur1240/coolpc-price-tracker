@@ -1103,7 +1103,7 @@
     "name": "｛華碩 DUAL-RTX5060TI-O16G｝2632MHz/23cm/雙風扇/註冊四年保固",
     "price": 25590,
     "qty": 1,
-    "alts": 14,
+    "alts": 13,
     "cat": "顯示卡VGA"
    },
    "GPU 升級": {
@@ -1138,7 +1138,7 @@
     "name": "｛XPG CORE SHIFT II VE 850W｝雙8/金牌/直出線/ATX3.1(PCIe 5.1)/5年保",
     "price": 2390,
     "qty": 1,
-    "alts": 49,
+    "alts": 55,
     "cat": "電源供應器"
    },
    "散熱器": {
@@ -1166,11 +1166,11 @@
    },
    "主機板": {
     "min": 1790,
-    "count": 349
+    "count": 348
    },
    "記憶體": {
     "min": 780,
-    "count": 191
+    "count": 190
    },
    "SSD": {
     "min": 1111,
@@ -1178,15 +1178,15 @@
    },
    "顯示卡": {
     "min": 190,
-    "count": 205
+    "count": 207
    },
    "電源供應器": {
     "min": 1090,
-    "count": 336
+    "count": 343
    },
    "散熱器": {
     "min": 1,
-    "count": 184
+    "count": 182
    },
    "CASE": {
     "min": 790,
@@ -1264,15 +1264,6 @@
       "url": "https://coupang.onelink.me/yowQ?pageKey=679015396163587&ctag=679015396163587&itemId=646526782980164&vendorItemId=646526783078437&pid=coupang_partners&c=AF8782393&is_retargeting=true&af_reengagement_window=7d&af_c_id=AF8782393&af_sub5=TWAFSDP&af_click_lookback=7d&deep_link_value=coupang%3A%2F%2Fproduct%3FpId%3D679015396163587%26itemId%3D646526782980164%26vendorItemId%3D646526783078437&af_r=https%3A%2F%2Flink.tw.coupang.com%2Fre2%2FTWAFSDP%3Flptag%3DAF8782393",
       "via": "BigGo",
       "group": "主要通路（BigGo 比價）"
-     },
-     {
-      "source": "蝦皮商城",
-      "title": "Bambu Lab P2S 3D列印機 廠商配送",
-      "price": 24500,
-      "in_stock": true,
-      "url": "https://shopee.tw/product/116026822/46612375953",
-      "via": "BigGo",
-      "group": "主要通路（BigGo 比價）"
      }
     ],
     "errors": []
@@ -1282,12 +1273,12 @@
     "offers": [],
     "errors": [
      {
-      "source": "主要通路（BigGo 比價）",
-      "error": "沒有符合的商品（可能沒賣這個版本）",
-      "nomatch": true
+      "source": "3D列印基地站",
+      "error": "GitHub 主機在美國，這個來源擋海外連線；只在台灣 IP 執行時抓取",
+      "skipped": true
      },
      {
-      "source": "3D列印基地站",
+      "source": "主要通路（BigGo 比價）",
       "error": "沒有符合的商品（可能沒賣這個版本）",
       "nomatch": true
      }
@@ -1301,7 +1292,8 @@
       "title": "AMD R7-9700X 3.8GHz 8核16緒/內顯/無風扇",
       "price": 11550,
       "in_stock": true,
-      "url": "https://www.isunfar.com.tw/product/?prodseq=251001"
+      "url": "https://www.isunfar.com.tw/product/?prodseq=251001",
+      "stale": "2026-11-25"
      },
      "PChome 24h": {
       "title": "AMD 超微 Ryzen 7 9700X 8核/16緒 處理器《3.8GHz/40M/65W/AM5》(代理商貨)",
@@ -1319,7 +1311,8 @@
       "title": "MSI RTX5060Ti 16G SHADOW 2X OC PLUS 顯示卡-上網註冊4年保固",
       "price": 28990,
       "in_stock": false,
-      "url": "https://www.isunfar.com.tw/product/?prodseq=202M93"
+      "url": "https://www.isunfar.com.tw/product/?prodseq=202M93",
+      "stale": "2026-11-25"
      },
      "PChome 24h": {
       "title": "ASUS 華碩 Dual GeForce RTX 5060 Ti 16GB GDDR7 OC 超頻版 顯示卡",
@@ -1337,7 +1330,8 @@
       "title": "MSI RTX5070Ti 16G VENTUS 3X -上網註冊4年保固",
       "price": 31990,
       "in_stock": false,
-      "url": "https://www.isunfar.com.tw/product/?prodseq=202M59"
+      "url": "https://www.isunfar.com.tw/product/?prodseq=202M59",
+      "stale": "2026-11-25"
      },
      "PChome 24h": {
       "title": "MSI 微星 GeForce RTX 5070 Ti 16G SHADOW 3X OC 顯示卡",
@@ -1368,7 +1362,8 @@
       "title": "Kingston 金士頓FURY Beast 獸獵者 DDR5 6000 64GB(32GBx2)白色/ 超頻/具XMP/EXPO 桌上型超頻記憶體",
       "price": 41500,
       "in_stock": true,
-      "url": "https://www.isunfar.com.tw/product/?prodseq=252K93"
+      "url": "https://www.isunfar.com.tw/product/?prodseq=252K93",
+      "stale": "2026-11-25"
      },
      "PChome 24h": {
       "title": "Micron 美光 PRO DDR5-6000 64G(32G*2) CL40 超頻 桌上型記憶體《白》(支援XMP/EXPO)",
@@ -1399,25 +1394,23 @@
       "title": "(客訂品)保銳  CyberG II 850W 金牌/直出扁線/ATX3.1(PCIe 5.1)/全日系/7年保 電源供應器",
       "price": 2390,
       "in_stock": true,
-      "url": "https://www.isunfar.com.tw/product/?prodseq=290B02"
+      "url": "https://www.isunfar.com.tw/product/?prodseq=290B02",
+      "stale": "2026-11-25"
      },
      "PChome 24h": {
       "title": "MONTECH GAMMA 3 850W 80Plus 金牌 ATX 3.1(PCIe 5.1) 電源供應器",
       "price": 2449,
       "url": "https://24h.pchome.com.tw/prod/DSAZ6G-A900K9F0K"
      },
-     "欣亞": {
-      "title": "聯力 LIAN LI EDGE V2 850W 黑 (80+金牌/ATX3.1/12V-2x6/L型設計/零轉速模式/全模組/十年保固)",
-      "price": 3199,
-      "url": "https://www.sinya.com.tw/prod/229393"
-     }
+     "欣亞": null
     },
     "散熱器": {
      "順發": {
       "title": " Phantom Spirit 120 CPU 散熱器 PS120",
       "price": 1490,
       "in_stock": false,
-      "url": "https://www.isunfar.com.tw/product/?prodseq=293002"
+      "url": "https://www.isunfar.com.tw/product/?prodseq=293002",
+      "stale": "2026-11-25"
      },
      "PChome 24h": {
       "title": "Thermalright 利民 Phantom Spirit 120 7導管 280W 散熱器(高15.7)",
@@ -1441,7 +1434,9 @@
     }
    },
    "errors": [],
-   "skipped": [],
+   "skipped": [
+    "順發"
+   ],
    "totals": {
     "stores": {
      "原價屋": 95210,
@@ -1450,11 +1445,9 @@
      "欣亞": null
     },
     "mix": 95069
-   },
-   "local_refreshed": {
-    "順發": "2026-11-25"
    }
   },
-  "alerts": []
+  "alerts": [],
+  "alerts_sent": []
  }
 }
