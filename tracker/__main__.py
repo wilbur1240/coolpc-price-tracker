@@ -148,7 +148,10 @@ def cmd_local(args) -> int:
             b = p["best"]
             print(f"[local] {prod['slot']}: 更新 {', '.join(got)}；最低 " + (f"{b['price']:,}（{b['source']}）" if b else "—"))
             merged += got
+    local_stores = [s["name"] for s in (cfg.get("chains") or {}).get("stores", []) if s.get("local_only")]
     got = refresh_chain_local(cfg, entry, hist, date)
+    for name in set(local_stores) - set(got):
+        print(f"[local] 連鎖賣場：{name} 這次全部失敗（連線逾時或被擋），保留之前的舊價；過一陣子再試")
     if got:
         t = entry["chains"]["totals"]
         print(f"[local] 連鎖賣場：更新 {', '.join(got)}；各通路最低組合 " + (f"{t['mix']:,}" if t["mix"] else "—"))

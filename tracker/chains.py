@@ -175,10 +175,11 @@ def refresh_local_stores(cfg: dict, entry: dict, hist: dict, date: str) -> list[
         chains.setdefault("items", {}).setdefault(slot, {}).update(cells)
     chains["errors"] = [e for e in chains.get("errors", []) if e["store"] not in names] + fresh["errors"]
     chains["skipped"] = [s for s in chains.get("skipped", []) if s not in names]
-    chains["local_refreshed"] = {n: date for n in names}
+    ok = [n for n in names if any((cells.get(n) is not None) for cells in fresh["items"].values())]
+    chains["local_refreshed"] = {**chains.get("local_refreshed", {}), **{n: date for n in ok}}
     carry_forward(chains, hist, date)
     chains["totals"] = store_totals(cfg, entry)
-    return names
+    return ok
 
 
 def store_totals(cfg: dict, entry: dict) -> dict:
