@@ -69,14 +69,15 @@ def cmd_run(args) -> int:
     if cfg.get("products") and not args.skip_products:
         entry["products"] = track_all(cfg)
         carry_forward(entry["products"], hist, date)
+        kind = lambda e: "nomatch" if e.get("nomatch") else "skipped" if e.get("skipped") else "fail"
         for slot, p in entry["products"].items():
             sort_offers(p)
             b = p["best"]
             print(f"[products] {slot}: " + (f"最低 {b['price']:,}（{b['source']}）" if b else "沒有價格")
                   + f"，{len(p['offers'])} 個來源有價格"
-                  + "".join(f"，{label}：{', '.join(e['source'] for e in p['errors'] if bool(e.get('nomatch')) == nm)}"
-                            for label, nm in (("失敗", False), ("沒有符合", True))
-                            if any(bool(e.get("nomatch")) == nm for e in p["errors"])))
+                  + "".join(f"，{label}：{', '.join(e['source'] for e in p['errors'] if kind(e) == k)}"
+                            for label, k in (("失敗", "fail"), ("沒有符合", "nomatch"), ("略過（只在台灣 IP 抓）", "skipped"))
+                            if any(kind(e) == k for e in p["errors"])))
     elif old.get("products"):
         entry["products"] = old["products"]
     if (cfg.get("chains") or {}).get("stores") and not args.skip_chains:
