@@ -172,7 +172,7 @@ if(CH&&CH.items&&Object.keys(CH.items).length){
  $('chainSec').innerHTML=`<h2>連鎖賣場比價 <span class="mut small">· 各通路最低組合 ${T.mix?'NT$ '+fmt(T.mix):'—'}${T.mix&&complete?`（比原價屋${T.mix<=cur.total?'省':'貴'} ${fmt(Math.abs(cur.total-T.mix))}）`:''}</span></h2>`+
   `<div class=wrap><table class=offers><thead><tr><th>部件</th>${stores.map(s=>`<th class=r>${esc(s)}</th>`).join('')}</tr></thead><tbody>${body}${foot}</tbody></table></div>`+
   `<div class="mut small" style="margin-top:6px">綠色是該部件有貨的最低價；滑鼠移到價格上可看品名，點價格開啟商品頁。各通路用關鍵字搜尋比對，品名寫法不同時可能漏抓。</div>`+
-  ((CH.skipped||[]).length?`<div class="err mut small">${CH.skipped.map(esc).join('、')}：擋海外連線，GitHub 每日自動執行時抓不到；在台灣 IP 執行（本機 scripts/local_run.sh）時才會更新，「舊價」是最近一次抓到的價格。</div>`:'')+
+  ((CH.skipped||[]).length?`<div class="err mut small">${CH.skipped.map(esc).join('、')}：擋海外連線，GitHub 每日自動執行時抓不到；在台灣 IP 手動執行 scripts/local_run.sh 時才會更新，「舊價」是最近一次抓到的價格。</div>`:'')+
   (errs.length?`<div class="err up small">搜尋失敗：${errs.map(e=>esc(e.store)+' '+esc(e.slot)+'（'+esc(e.error)+'）').join('、')}</div>`:'');
 }
 

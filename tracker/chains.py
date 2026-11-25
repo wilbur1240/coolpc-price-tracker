@@ -162,6 +162,25 @@ def carry_forward(chains: dict, hist: dict, date: str) -> None:
                     break
 
 
+def refresh_local_stores(cfg: dict, entry: dict, hist: dict, date: str) -> list[str]:
+    """Search only the local_only stores and merge the results into entry["chains"] (in place)."""
+    ch = cfg.get("chains") or {}
+    local = [s for s in ch.get("stores", []) if s.get("local_only")]
+    if not local or not entry.get("chains"):
+        return []
+    names = [s["name"] for s in local]
+    fresh = compare({**cfg, "chains": {**ch, "stores": local}}, entry["items"])
+    chains = entry["chains"]
+    for slot, cells in fresh["items"].items():
+        chains.setdefault("items", {}).setdefault(slot, {}).update(cells)
+    chains["errors"] = [e for e in chains.get("errors", []) if e["store"] not in names] + fresh["errors"]
+    chains["skipped"] = [s for s in chains.get("skipped", []) if s not in names]
+    chains["local_refreshed"] = {n: date for n in names}
+    carry_forward(chains, hist, date)
+    chains["totals"] = store_totals(cfg, entry)
+    return names
+
+
 def store_totals(cfg: dict, entry: dict) -> dict:
     """Per-store full-build total (only when the store has every counted part) and best-mix total."""
     ch = entry.get("chains") or {}

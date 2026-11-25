@@ -11,7 +11,8 @@ from .fetch import FetchError, decode, fetch
 from .match import in_category, match_config
 from .parse import category_counts, parse_html, parse_pipe_txt
 from .chains import carry_forward as chains_carry_forward, compare as compare_chains, store_totals
-from .products import carry_forward, sort_offers, track_all
+from .chains import refresh_local_stores as refresh_chain_local
+from .products import carry_forward, refresh_local_sources, sort_offers, track_all
 from .render import render
 
 MIN_ROWS = 1000
@@ -125,6 +126,52 @@ def cmd_run(args) -> int:
     return 0
 
 
+def cmd_local(args) -> int:
+    """Fetch only the local_only sources (Taiwan-IP-only shops) and merge them into today's
+    entry written by the GitHub run. Meant for scripts/local_run.sh on a machine in Taiwan."""
+    cfg, hist = store.load_config(), store.load_history()
+    date = args.date or store.today()
+    entry = hist.get(date)
+    if not entry:
+        print(f"[local] {date} 還沒有 GitHub 的資料，略過（等 GitHub 每日執行完再跑）")
+        return 0
+    hist_before = {d: h for d, h in hist.items()}
+    merged = []
+    for prod in cfg.get("products", []):
+        p = (entry.setdefault("products", {})).get(prod["slot"])
+        if p is None:
+            continue
+        got = refresh_local_sources(prod, p)
+        carry_forward({prod["slot"]: p}, {d: h for d, h in hist_before.items() if d < date}, date)
+        sort_offers(p)
+        if got:
+            b = p["best"]
+            print(f"[local] {prod['slot']}: 更新 {', '.join(got)}；最低 " + (f"{b['price']:,}（{b['source']}）" if b else "—"))
+            merged += got
+    got = refresh_chain_local(cfg, entry, hist, date)
+    if got:
+        t = entry["chains"]["totals"]
+        print(f"[local] 連鎖賣場：更新 {', '.join(got)}；各通路最低組合 " + (f"{t['mix']:,}" if t["mix"] else "—"))
+        merged += got
+    if not merged:
+        print("[local] config 裡沒有 local_only 的來源")
+        return 0
+
+    # alerts that only the local data can trigger (e.g. a part hits its target at 順發)
+    alerts = [a for a in notify.compute_alerts(cfg, hist, date) if a not in (entry.get("alerts_sent") or [])]
+    if alerts and not args.no_notify:
+        if notify.send(f"價格追蹤：{cfg.get('build_name', '目標配置')}（台灣 IP 補抓）", "\n".join(alerts),
+                       priority="high", tags="moneybag"):
+            entry["alerts_sent"] = (entry.get("alerts_sent") or []) + alerts
+    if args.dry_run:
+        print("[local] dry-run: 不寫檔")
+        return 0
+    store.save_history(hist)
+    _, rows = store.latest_snapshot()
+    print(f"[local] wrote {render(cfg, hist, date, rows or []).relative_to(store.ROOT)}")
+    return 0
+
+
 def cmd_render(args) -> int:
     cfg, hist = store.load_config(), store.load_history()
     date, rows = store.latest_snapshot()
@@ -154,6 +201,11 @@ def main(argv=None) -> int:
     r.add_argument("--skip-chains", action="store_true", help="不做連鎖賣場（順發／PChome／欣亞）比價")
     r.add_argument("--dry-run", action="store_true", help="只印結果，不寫檔、不通知")
     r.set_defaults(fn=cmd_run)
+    lo = sub.add_parser("local", help="只抓 local_only 來源（順發等擋海外 IP 的店），併入今天 GitHub 的資料")
+    lo.add_argument("--date", help="資料日期 YYYY-MM-DD（預設今天，台北時間）")
+    lo.add_argument("--no-notify", action="store_true", help="不發通知")
+    lo.add_argument("--dry-run", action="store_true", help="只印結果，不寫檔")
+    lo.set_defaults(fn=cmd_local)
     sub.add_parser("render", help="用現有資料重新產生 docs/index.html").set_defaults(fn=cmd_render)
     sub.add_parser("notify-test", help="發一則測試通知").set_defaults(fn=cmd_notify_test)
     args = ap.parse_args(argv)

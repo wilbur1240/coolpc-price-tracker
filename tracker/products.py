@@ -264,6 +264,35 @@ ON_GITHUB = os.environ.get("GITHUB_ACTIONS") == "true"
 LOCAL_ONLY_MSG = "GitHub 主機在美國，這個來源擋海外連線；只在台灣 IP 執行時抓取"
 
 
+def fetch_into(src: dict, prod: dict, offers: list, errors: list) -> None:
+    try:
+        got = fetch_source(src, prod)
+        if not got:
+            errors.append({"source": src["name"], "error": "沒有符合的商品（可能沒賣這個版本）", "nomatch": True})
+        offers += got
+    except (SourceError, requests.RequestException, ValueError, KeyError) as e:
+        errors.append({"source": src["name"], "error": str(e) or type(e).__name__})
+
+
+def finalize(offers: list, errors: list) -> dict:
+    """One row per shop (fresh beats stale, then in-stock, then cheapest) and the best price.
+    Stale and reference offers never become the best."""
+    per: dict[str, dict] = {}
+    rank = lambda o: (bool(o.get("stale")), not o["in_stock"], o.get("price") or 10**9)
+    for o in offers:
+        cur = per.get(o["source"])
+        if cur is None or rank(o) < rank(cur):
+            per[o["source"]] = o
+    offers = list(per.values())
+    counted = [o for o in offers if not o.get("ref") and not o.get("stale") and o.get("price")]
+    in_stock = [o for o in counted if o["in_stock"]]
+    pool = in_stock or counted
+    best = min(pool, key=lambda o: o["price"]) if pool else None
+    p = {"best": best, "offers": offers, "errors": errors}
+    sort_offers(p)
+    return p
+
+
 def track_product(prod: dict) -> dict:
     """Return a history entry for one product."""
     offers, errors = [], []
@@ -271,27 +300,23 @@ def track_product(prod: dict) -> dict:
         if src.get("local_only") and ON_GITHUB:
             errors.append({"source": src["name"], "error": LOCAL_ONLY_MSG, "skipped": True})
             continue
-        try:
-            got = fetch_source(src, prod)
-            if not got:
-                errors.append({"source": src["name"], "error": "沒有符合的商品（可能沒賣這個版本）", "nomatch": True})
-            offers += got
-        except (SourceError, requests.RequestException, ValueError, KeyError) as e:
-            errors.append({"source": src["name"], "error": str(e) or type(e).__name__})
-    # one row per shop: cheapest in-stock offer, else cheapest
-    per: dict[str, dict] = {}
-    for o in offers:
-        cur = per.get(o["source"])
-        key = (not o["in_stock"], o.get("price") or 10**9)
-        if cur is None or key < (not cur["in_stock"], cur.get("price") or 10**9):
-            per[o["source"]] = o
-    offers = list(per.values())
-    counted = [o for o in offers if not o.get("ref") and o.get("price")]
-    in_stock = [o for o in counted if o["in_stock"]]
-    pool = in_stock or counted
-    best = min(pool, key=lambda o: o["price"]) if pool else None
-    offers.sort(key=lambda o: (o.get("ref", False), o.get("price") or 10**9))
-    return {"best": best, "offers": offers, "errors": errors}
+        fetch_into(src, prod, offers, errors)
+    return finalize(offers, errors)
+
+
+def refresh_local_sources(prod: dict, p: dict) -> list[str]:
+    """Re-fetch only this product's local_only sources and merge them into an existing
+    day entry `p` (in place). Returns the names of the sources refreshed."""
+    names = [s["name"] for s in prod["sources"] if s.get("local_only")]
+    if not names:
+        return []
+    offers = [o for o in p.get("offers", []) if o.get("group") not in names]
+    errors = [e for e in p.get("errors", []) if e["source"] not in names]
+    for src in prod["sources"]:
+        if src.get("local_only"):
+            fetch_into(src, prod, offers, errors)
+    p.update(finalize(offers, errors))
+    return names
 
 
 def sort_offers(p: dict) -> None:

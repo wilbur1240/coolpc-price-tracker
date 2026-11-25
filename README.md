@@ -16,7 +16,7 @@
 
 GitHub 的排程 cron 常延遲 5～30 分鐘，這是正常現象。
 
-**連線實測（2026-11-18）**：GitHub-hosted runner（ubuntu-latest）可以正常連到 coolpc.com.tw，解析出 6,586 筆、30 類，所以不需要 self-hosted runner。如果之後被擋，改用下面的「備案：本機 cron」。
+**連線實測（2026-11-18）**：GitHub-hosted runner（ubuntu-latest）可以正常連到 coolpc.com.tw，解析出 6,586 筆、30 類，所以不需要 self-hosted runner。如果之後被擋，改用下面的「備案：整個改在本機跑」。
 
 ## 修改目標配置
 
@@ -156,15 +156,22 @@ python -m tracker render               # 用現有資料重新產生網頁
 python -m unittest -v                  # 單元測試（用 data/sample_2026-11-18.txt）
 ```
 
-### 備案：本機 cron
+### 在台灣 IP 補抓順發等商店（手動）
 
-如果 GitHub runner 被原價屋擋掉，可以改在本機（或任何台灣 IP 的機器）跑 `scripts/local_run.sh`。它會 pull、執行、commit 並 push，網頁照樣由 GitHub Pages 發佈。通知用的 secret 寫在 `scripts/.env`（已加入 gitignore）。
+順發、3D列印基地站擋海外連線，GitHub 每日執行抓不到（config 裡標了 `"local_only": true`）。想看它們的最新價格時，在自己的電腦上執行：
 
-```cron
-50 9 * * * /path/to/coolpc-price-tracker/scripts/local_run.sh >> /tmp/coolpc.log 2>&1
+```bash
+scripts/local_run.sh
 ```
 
-本機 cron 用的是本機時區，上面這行假設本機是台北時間。改用本機跑時，記得把 `daily.yml` 的 `schedule` 拿掉，避免兩邊同時寫入。
+它會 pull、只抓這幾家，併入今天 GitHub 跑出來的資料（其他來源不動）、重新產生網頁，然後 commit 並 push。所以要在當天 GitHub 跑完之後（台北 10 點後）再執行。只想看結果、不寫檔：`python3 -m tracker local --dry-run --no-notify`。
+
+- 某部件在順發新達到目標價時也會發通知；要收到的話，把 Telegram／ntfy 的設定寫在 `scripts/.env`（已加入 gitignore）。
+- 不要短時間內重複執行很多次：2026-11-25 測試時連續請求四十多次後，順發開始對這台電腦連線逾時。
+
+### 備案：整個改在本機跑
+
+如果 GitHub runner 連原價屋也被擋，改用 `scripts/local_run.sh --full` 在台灣 IP 的機器跑完整流程，並把 `daily.yml` 的 `schedule` 拿掉，避免兩邊同時寫入。想排程的話可以用 cron 或 Windows 工作排程器；注意 WSL 裡的 cron 只有在 WSL 開著時才會執行。
 
 ## 專案結構
 
