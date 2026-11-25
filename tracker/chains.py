@@ -21,7 +21,7 @@ import urllib.parse
 import requests
 
 from .match import name_matches
-from .products import SourceError, _get
+from .products import ON_GITHUB, SourceError, _get
 
 
 # ---------------------------------------------------------------- store parsers (pure, testable)
@@ -120,6 +120,10 @@ def compare(cfg: dict, coolpc_items: dict, delay: float = 1.0, budget: float = 3
             if not q:
                 continue
             out["items"][slot][name] = None
+            if st.get("local_only") and ON_GITHUB:
+                if name not in out.setdefault("skipped", []):
+                    out["skipped"].append(name)
+                continue
             if fails.get(name, 0) >= 2:
                 out["errors"].append({"store": name, "slot": slot, "error": "連續失敗，今天略過"})
                 continue
@@ -140,6 +144,24 @@ def compare(cfg: dict, coolpc_items: dict, delay: float = 1.0, budget: float = 3
     return out
 
 
+def carry_forward(chains: dict, hist: dict, date: str) -> None:
+    """Cells that are empty because the store was skipped or failed get the last real offer,
+    marked {"stale": date}. Stale offers are shown but never counted in totals or alerts."""
+    missing_stores = set(chains.get("skipped", [])) | {e["store"] for e in chains.get("errors", [])}
+    if not missing_stores:
+        return
+    past = sorted((d for d in hist if d <= date), reverse=True)   # hist[date] is still today's earlier run
+    for slot, cells in chains.get("items", {}).items():
+        for store in missing_stores:
+            if store not in cells or cells[store] is not None:
+                continue
+            for d in past:
+                o = ((((hist[d].get("chains") or {}).get("items") or {}).get(slot)) or {}).get(store)
+                if o and not o.get("stale"):
+                    cells[store] = {**o, "stale": d}
+                    break
+
+
 def store_totals(cfg: dict, entry: dict) -> dict:
     """Per-store full-build total (only when the store has every counted part) and best-mix total."""
     ch = entry.get("chains") or {}
@@ -152,7 +174,7 @@ def store_totals(cfg: dict, entry: dict) -> dict:
         q = it.get("qty", 1)
         prices = {"原價屋": (entry["items"].get(it["slot"]) or {}).get("price")}
         for s, o in (ch.get("items", {}).get(it["slot"]) or {}).items():
-            prices[s] = o["price"] if o and o.get("in_stock", True) else None
+            prices[s] = o["price"] if o and o.get("in_stock", True) and not o.get("stale") else None
         for s in stores:
             if totals[s] is not None:
                 totals[s] = totals[s] + prices[s] * q if prices.get(s) else None

@@ -10,7 +10,7 @@ from . import notify, store
 from .fetch import FetchError, decode, fetch
 from .match import in_category, match_config
 from .parse import category_counts, parse_html, parse_pipe_txt
-from .chains import compare as compare_chains, store_totals
+from .chains import carry_forward as chains_carry_forward, compare as compare_chains, store_totals
 from .products import carry_forward, sort_offers, track_all
 from .render import render
 
@@ -81,6 +81,7 @@ def cmd_run(args) -> int:
         entry["products"] = old["products"]
     if (cfg.get("chains") or {}).get("stores") and not args.skip_chains:
         entry["chains"] = compare_chains(cfg, entry["items"])
+        chains_carry_forward(entry["chains"], hist, date)
         entry["chains"]["totals"] = store_totals(cfg, entry)
         t = entry["chains"]["totals"]
         print(f"[chains] 各通路最低組合 {t['mix']:,}" if t["mix"] else "[chains] 各通路最低組合：有零件沒有任何通路有貨",

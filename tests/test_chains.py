@@ -88,6 +88,28 @@ class TotalsAlertTest(unittest.TestCase):
         self.assertFalse([x for x in notify.chain_alerts(CFG, hist, "2026-11-26") if "GPU" in x])
 
 
+class LocalOnlyCarryForwardTest(unittest.TestCase):
+    def test_skipped_store_gets_stale_offer_excluded_from_totals(self):
+        from unittest import mock
+        import tracker.chains as chains
+        cfg = {"items": [{"slot": "CPU", "match": ["9700X"], "search": "9700X"}],
+               "chains": {"stores": [{"name": "順發", "type": "sunfar", "local_only": True},
+                                     {"name": "PChome 24h", "type": "pchome"}]}}
+        with mock.patch.object(chains, "ON_GITHUB", True), \
+             mock.patch.object(chains, "search_store", return_value=[{"title": "AMD 9700X", "price": 11550}]):
+            out = chains.compare(cfg, {"CPU": {"price": 11550}}, delay=0)
+        self.assertEqual(out["skipped"], ["順發"])
+        self.assertIsNone(out["items"]["CPU"]["順發"])
+        hist = {"2026-11-24": {"chains": {"items": {"CPU": {"順發": {"price": 11000, "title": "x"}}}}}}
+        chains.carry_forward(out, hist, "2026-11-25")
+        self.assertEqual(out["items"]["CPU"]["順發"]["stale"], "2026-11-24")
+        e = {"items": {"CPU": {"price": 11550}}, "chains": out}
+        t = chains.store_totals(cfg, e)
+        self.assertIsNone(t["stores"]["順發"])            # stale never counts
+        self.assertEqual(t["mix"], 11550)
+        self.assertIsNone(notify._chain_best({"chains": {"items": {"CPU": {"順發": out["items"]["CPU"]["順發"]}}}}, "CPU"))
+
+
 class Cc2Test(unittest.TestCase):
     CC2 = next(p for p in CFG["products"] if "Centauri" in p["slot"])
 

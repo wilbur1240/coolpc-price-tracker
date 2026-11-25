@@ -14,6 +14,7 @@ Source types:
 from __future__ import annotations
 
 import json
+import os
 import re
 import urllib.parse
 
@@ -35,12 +36,14 @@ def _get(url: str, accept: str = "text/html,*/*") -> requests.Response:
     last = None
     for attempt in range(3):
         try:
-            r = requests.get(url, headers={**HEADERS, "Accept": accept}, timeout=TIMEOUT)
+            r = requests.get(url, headers={**HEADERS, "Accept": accept}, timeout=(10, TIMEOUT))
             if r.status_code == 200:
                 return r
             last = f"HTTP {r.status_code}"
             if r.status_code not in (429, 500, 502, 503, 504):
                 break
+        except requests.ConnectionError as e:     # includes ConnectTimeout: host unreachable, don't wait it out
+            raise SourceError(type(e).__name__)
         except requests.RequestException as e:
             last = type(e).__name__
         if attempt < 2:
@@ -257,10 +260,17 @@ def carry_forward(products: dict, hist: dict, date: str) -> None:
             failed -= got
 
 
+ON_GITHUB = os.environ.get("GITHUB_ACTIONS") == "true"
+LOCAL_ONLY_MSG = "GitHub 主機在美國，這個來源擋海外連線；只在台灣 IP 執行時抓取"
+
+
 def track_product(prod: dict) -> dict:
     """Return a history entry for one product."""
     offers, errors = [], []
     for src in prod["sources"]:
+        if src.get("local_only") and ON_GITHUB:
+            errors.append({"source": src["name"], "error": LOCAL_ONLY_MSG, "skipped": True})
+            continue
         try:
             got = fetch_source(src, prod)
             if not got:

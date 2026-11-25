@@ -207,7 +207,8 @@
   "stores": [
    {
     "name": "順發",
-    "type": "sunfar"
+    "type": "sunfar",
+    "local_only": true
    },
    {
     "name": "PChome 24h",
@@ -339,7 +340,8 @@
     {
      "name": "3D列印基地站",
      "type": "woocommerce",
-     "url": "https://www.3dpbase.com/shop/elegoo-centauri-carbon-2-cc2/"
+     "url": "https://www.3dpbase.com/shop/elegoo-centauri-carbon-2-cc2/",
+     "local_only": true
     },
     {
      "name": "主要通路（BigGo 比價）",

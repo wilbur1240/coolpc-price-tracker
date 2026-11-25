@@ -54,7 +54,7 @@ def compute_alerts(cfg: dict, hist: dict, date: str) -> list[str]:
 def _chain_best(entry, slot):
     """Cheapest purchasable chain-store offer for a slot: (store, offer) or None."""
     offers = (((entry or {}).get("chains") or {}).get("items") or {}).get(slot) or {}
-    ok = [(s, o) for s, o in offers.items() if o and o.get("in_stock", True)]
+    ok = [(s, o) for s, o in offers.items() if o and o.get("in_stock", True) and not o.get("stale")]
     return min(ok, key=lambda x: x[1]["price"]) if ok else None
 
 
@@ -92,7 +92,8 @@ def product_alerts(cfg: dict, hist: dict, date: str) -> list[str]:
         s, tp = prod["slot"], prod.get("target_price")
         b, pb = _best(cur, s), _best(prev, s)
         if not b:
-            errs = [e for e in ((((cur.get("products") or {}).get(s) or {}).get("errors")) or []) if not e.get("nomatch")]
+            errs = [e for e in ((((cur.get("products") or {}).get(s) or {}).get("errors")) or [])
+                    if not e.get("nomatch") and not e.get("skipped")]
             if errs:
                 out.append(f"⚠️ {s} 今天所有價格來源都失敗：" + "；".join(f"{e['source']} {e['error']}" for e in errs))
             continue
