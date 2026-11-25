@@ -6,6 +6,7 @@ never aborts the run.
 
 Source types:
   cyberbiz     Cyberbiz shop product page  (<url>.json, Shopify-like)
+  woocommerce  WooCommerce product page    (variations JSON or JSON-LD)
   shopify      Shopify product page        (<url>.js)
   biggo        BigGo search, filtered to the listed major channels
   bambu_store  Bambu Lab official web store (USD, JSON-LD); reference only
@@ -19,7 +20,7 @@ import urllib.parse
 import requests
 
 from .fetch import UA
-from .match import nz
+from .match import name_matches, nz
 
 TIMEOUT = 30
 HEADERS = {"User-Agent": UA, "Accept-Language": "zh-TW,zh;q=0.9,en;q=0.6"}
@@ -51,12 +52,7 @@ def _get(url: str, accept: str = "text/html,*/*") -> requests.Response:
 
 def title_ok(title: str, prod: dict) -> bool:
     """Listing/variant title passes the product's match/exclude rules."""
-    n = nz(title)
-    if not all(nz(k) in n for k in prod.get("match", [])):
-        return False
-    if any(nz(k) in n for k in prod.get("exclude", [])):
-        return False
-    return True
+    return name_matches(title, prod)
 
 
 def variant_ok(title: str, prod: dict) -> bool:
@@ -74,7 +70,7 @@ def listing_is_variant_excluded(title: str, prod: dict) -> bool:
         if kk in n:
             base = n.replace(kk, "")
             # keep if the base model also appears on its own ("p2s/p2scombo" -> "p2s/p2s")
-            base_kw = [nz(m) for m in prod.get("match", [])]
+            base_kw = [nz(x) for m in prod.get("match", []) for x in (m if isinstance(m, list) else [m])]
             if not any(base.count(b) >= 2 for b in base_kw) and "單機" not in n:
                 return True
     return False
@@ -108,6 +104,38 @@ def parse_shopify_js(data: dict, prod: dict, source: str, url: str) -> list[dict
             continue
         out.append({"source": source, "title": f"{data.get('title', '')}（{vt}）",
                     "price": price, "in_stock": bool(v.get("available")), "url": url})
+    return out
+
+
+def parse_woocommerce(html: str, prod: dict, source: str, url: str) -> list[dict]:
+    """WooCommerce variable product: <form data-product_variations="[...]">; simple product: JSON-LD offer."""
+    import html as H
+    tm = re.search(r'<meta property="og:title" content="([^"]*)"', html)
+    title = H.unescape(tm.group(1)) if tm else ""
+    m = re.search(r'data-product_variations="([^"]+)"', html)
+    out = []
+    if m:
+        for v in json.loads(H.unescape(m.group(1))):
+            vt = " / ".join(str(x) for x in (v.get("attributes") or {}).values())
+            price = int(round(float(v.get("display_price") or 0)))
+            if price <= 0 or not variant_ok(vt, prod):
+                continue
+            out.append({"source": source, "title": f"{title}（{vt}）", "price": price,
+                        "in_stock": bool(v.get("is_in_stock")), "url": url})
+        return out
+    for blob in re.findall(r'<script[^>]*application/ld\+json[^>]*>(.*?)</script>', html, re.S):
+        try:
+            j = json.loads(blob)
+        except ValueError:
+            continue
+        for node in (j.get("@graph", [j]) if isinstance(j, dict) else j):
+            if isinstance(node, dict) and node.get("@type") == "Product":
+                offers = node.get("offers") or {}
+                offers = offers[0] if isinstance(offers, list) else offers
+                price = offers.get("price") or (offers.get("lowPrice") if offers.get("@type") == "AggregateOffer" else None)
+                if price:
+                    out.append({"source": source, "title": node.get("name", title), "price": int(round(float(price))),
+                                "in_stock": "InStock" in (offers.get("availability") or ""), "url": url})
     return out
 
 
@@ -185,6 +213,9 @@ def fetch_source(src: dict, prod: dict) -> list[dict]:
         url = src["url"].split("?")[0]
         data = _get(url + ".js", "application/json").json()
         offers = parse_shopify_js(data, prod, name, url)
+    elif t == "woocommerce":
+        url = src["url"]
+        offers = parse_woocommerce(_get(url).text, prod, name, url)
     elif t == "biggo":
         url = "https://biggo.com.tw/s/" + urllib.parse.quote(src["query"]) + "/"
         offers = parse_biggo(biggo_items(_get(url).text), prod, src.get("stores", []))
@@ -213,7 +244,7 @@ def carry_forward(products: dict, hist: dict, date: str) -> None:
     """For sources that failed today, show their last successful offers, marked stale.
     Stale offers never count toward the best price or alerts."""
     for slot, p in products.items():
-        failed = {e["source"] for e in p.get("errors", [])}
+        failed = {e["source"] for e in p.get("errors", []) if not e.get("nomatch")}
         # hist[date] (if present) is still the earlier run of today, so it is searched first
         for d in sorted((d for d in hist if d <= date), reverse=True):
             if not failed:
@@ -233,7 +264,7 @@ def track_product(prod: dict) -> dict:
         try:
             got = fetch_source(src, prod)
             if not got:
-                errors.append({"source": src["name"], "error": "沒有符合的商品"})
+                errors.append({"source": src["name"], "error": "沒有符合的商品（可能沒賣這個版本）", "nomatch": True})
             offers += got
         except (SourceError, requests.RequestException, ValueError, KeyError) as e:
             errors.append({"source": src["name"], "error": str(e) or type(e).__name__})

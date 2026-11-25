@@ -10,6 +10,7 @@ from . import notify, store
 from .fetch import FetchError, decode, fetch
 from .match import in_category, match_config
 from .parse import category_counts, parse_html, parse_pipe_txt
+from .chains import compare as compare_chains, store_totals
 from .products import carry_forward, sort_offers, track_all
 from .render import render
 
@@ -72,9 +73,21 @@ def cmd_run(args) -> int:
             sort_offers(p)
             b = p["best"]
             print(f"[products] {slot}: " + (f"最低 {b['price']:,}（{b['source']}）" if b else "沒有價格")
-                  + f"，{len(p['offers'])} 個來源有價格" + (f"，失敗：{', '.join(e['source'] for e in p['errors'])}" if p["errors"] else ""))
+                  + f"，{len(p['offers'])} 個來源有價格"
+                  + "".join(f"，{label}：{', '.join(e['source'] for e in p['errors'] if bool(e.get('nomatch')) == nm)}"
+                            for label, nm in (("失敗", False), ("沒有符合", True))
+                            if any(bool(e.get("nomatch")) == nm for e in p["errors"])))
     elif old.get("products"):
         entry["products"] = old["products"]
+    if (cfg.get("chains") or {}).get("stores") and not args.skip_chains:
+        entry["chains"] = compare_chains(cfg, entry["items"])
+        entry["chains"]["totals"] = store_totals(cfg, entry)
+        t = entry["chains"]["totals"]
+        print(f"[chains] 各通路最低組合 {t['mix']:,}" if t["mix"] else "[chains] 各通路最低組合：有零件沒有任何通路有貨",
+              "；整台：" + "、".join(f"{s} {v:,}" for s, v in t["stores"].items() if v)
+              + (f"；失敗 {len(entry['chains']['errors'])} 次" if entry["chains"]["errors"] else ""))
+    elif old.get("chains"):
+        entry["chains"] = old["chains"]
     hist[date] = entry
 
     alerts = notify.compute_alerts(cfg, hist, date)
@@ -136,6 +149,7 @@ def main(argv=None) -> int:
     r.add_argument("--date", help="資料日期 YYYY-MM-DD（預設今天，台北時間）")
     r.add_argument("--no-notify", action="store_true", help="不發通知")
     r.add_argument("--skip-products", action="store_true", help="不抓 config.products（其他商品）的價格")
+    r.add_argument("--skip-chains", action="store_true", help="不做連鎖賣場（順發／PChome／欣亞）比價")
     r.add_argument("--dry-run", action="store_true", help="只印結果，不寫檔、不通知")
     r.set_defaults(fn=cmd_run)
     sub.add_parser("render", help="用現有資料重新產生 docs/index.html").set_defaults(fn=cmd_render)

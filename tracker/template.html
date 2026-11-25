@@ -63,6 +63,7 @@ a.ext{color:var(--acc);text-decoration:none}a.ext:hover{text-decoration:underlin
 <div class=cards id=cards></div>
 <h2>目標配置 <span class="mut small" id=hits></span></h2>
 <div class=wrap><table id=tgt><thead><tr><th>部件</th><th>今日最便宜的符合品項</th><th class=r>數量</th><th class=r>單價</th><th class=r>較前次</th><th class=r>歷史最低</th><th class=r>目標價</th></tr></thead><tbody></tbody></table></div>
+<div id=chainSec></div>
 <div id=prodSec></div>
 <h2>總價走勢</h2>
 <div class=panel id=totalChart></div>
@@ -144,9 +145,37 @@ tb.innerHTML=cfg.items.map(it=>{
 }).join('');
 tb.querySelectorAll('tr').forEach(tr=>tr.onclick=()=>{pick(tr.dataset.s);$('itemChart').scrollIntoView({behavior:'smooth',block:'center'});});
 
+const safeUrl=u=>/^https?:\/\//i.test(u||'')?u:'';
+const link=(u,t)=>{u=safeUrl(u);return u?`<a class=ext href="${esc(u)}" target=_blank rel="noopener nofollow">${t}</a>`:t;};
+
+// chain-store comparison
+const CH=cur.chains;
+if(CH&&CH.items&&Object.keys(CH.items).length){
+ const stores=['原價屋'].concat(((cfg.chains||{}).stores||[]).map(s=>s.name));
+ const offer=(it,s)=>s==='原價屋'?(cur.items[it.slot]?{price:cur.items[it.slot].price,title:cur.items[it.slot].name,url:'https://www.coolpc.com.tw/evaluate.php',in_stock:true}:null):((CH.items[it.slot]||{})[s]||null);
+ const body=cfg.items.filter(it=>CH.items[it.slot]).map(it=>{
+  const os=stores.map(s=>offer(it,s));
+  const ok=os.filter(o=>o&&o.in_stock!==false).map(o=>o.price);
+  const lo=ok.length?Math.min(...ok):null;
+  const cells=os.map(o=>{
+   if(!o)return '<td class="r mut">—</td>';
+   if(o.in_stock===false)return `<td class="r mut" title="${esc(o.title)}">${link(o.url,'缺貨 '+fmt(o.price))}</td>`;
+   const best=o.price===lo;
+   return `<td class=r title="${esc(o.title)}">${link(o.url,best?`<span class=hit>${fmt(o.price)}</span>`:fmt(o.price))}</td>`;
+  }).join('');
+  return `<tr${it.optional?' class=opt':''}><td><b>${esc(it.slot)}</b>${it.optional?' <span class="mut small">不計入</span>':''}</td>${cells}</tr>`;
+ }).join('');
+ const T=CH.totals||{stores:{},mix:null};
+ const foot=`<tr><td><b>整台總價</b><div class="mut small">該通路每樣都有貨才算</div></td>`+stores.map(s=>`<td class=r><b>${T.stores[s]?fmt(T.stores[s]):'<span class=mut>湊不齊</span>'}</b></td>`).join('')+'</tr>';
+ const errs=(CH.errors||[]);
+ $('chainSec').innerHTML=`<h2>連鎖賣場比價 <span class="mut small">· 各通路最低組合 ${T.mix?'NT$ '+fmt(T.mix):'—'}${T.mix&&complete?`（比原價屋${T.mix<=cur.total?'省':'貴'} ${fmt(Math.abs(cur.total-T.mix))}）`:''}</span></h2>`+
+  `<div class=wrap><table class=offers><thead><tr><th>部件</th>${stores.map(s=>`<th class=r>${esc(s)}</th>`).join('')}</tr></thead><tbody>${body}${foot}</tbody></table></div>`+
+  `<div class="mut small" style="margin-top:6px">綠色是該部件有貨的最低價；滑鼠移到價格上可看品名，點價格開啟商品頁。各通路用關鍵字搜尋比對，品名寫法不同時可能漏抓。</div>`+
+  (errs.length?`<div class="err up small">搜尋失敗：${errs.map(e=>esc(e.store)+' '+esc(e.slot)+'（'+esc(e.error)+'）').join('、')}</div>`:'');
+}
+
 // other products (multi-shop)
 const prods=cfg.products||[];
-const safeUrl=u=>/^https?:\/\//i.test(u||'')?u:'';
 const pbest=(d,s)=>{const P=d&&d.products&&d.products[s];return P&&P.best?P.best:null;};
 if(prods.length){
  let h='<h2>其他追蹤商品</h2>';
@@ -168,7 +197,9 @@ if(prods.length){
     `<td class=r>${o.price!=null?(o.ref?'約 ':'')+fmt(o.price):'—'}${isBest?' <span class=hit>最低</span>':''}</td><td class=r>${st}</td></tr>`;
   }).join('');
   h+=`<div class=wrap style="margin-top:10px"><table class=offers><thead><tr><th>通路</th><th>商品</th><th class=r>價格</th><th class=r>狀態</th></tr></thead><tbody>${orows||'<tr><td colspan=4 class=mut>沒有資料</td></tr>'}</tbody></table></div>`;
-  if((P.errors||[]).length)h+=`<div class="err up small">無法取得：${P.errors.map(e=>esc(e.source)+'（'+esc(e.error)+'）').join('、')}</div>`;
+  const fails=(P.errors||[]).filter(e=>!e.nomatch),nom=(P.errors||[]).filter(e=>e.nomatch);
+  if(fails.length)h+=`<div class="err up small">無法取得：${fails.map(e=>esc(e.source)+'（'+esc(e.error)+'）').join('、')}</div>`;
+  if(nom.length)h+=`<div class="err mut small">沒有符合的商品（可能沒賣這個版本）：${nom.map(e=>esc(e.source)).join('、')}</div>`;
   h+=`<div class="mut small" style="margin:12px 0 4px">最低價走勢（不含「參考」）</div><div class=panel id=pc${pi}></div>`;
  });
  $('prodSec').innerHTML=h;

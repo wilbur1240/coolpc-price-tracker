@@ -16,10 +16,15 @@ def in_category(row: dict, category: str | None) -> bool:
     return not category or nz(category) in nz(row['cat'])
 
 
-def name_matches(name: str, item: dict) -> bool:
+def _has(n: str, k) -> bool:
+    """k is a keyword, or a list of alternative keywords (any one may match)."""
+    return any(nz(x) in n for x in k) if isinstance(k, list) else nz(k) in n
+
+
+def name_matches(name: str, item: dict, match_key: str = 'match', exclude_key: str = 'exclude') -> bool:
     n = nz(name)
-    return (all(nz(k) in n for k in item.get('match', []))
-            and not any(nz(k) in n for k in item.get('exclude', [])))
+    return (all(_has(n, k) for k in item.get(match_key, []))
+            and not any(_has(n, k) for k in item.get(exclude_key, [])))
 
 
 def candidates(rows: list[dict], item: dict) -> list[dict]:

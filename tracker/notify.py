@@ -47,6 +47,34 @@ def compute_alerts(cfg: dict, hist: dict, date: str) -> list[str]:
         if prev and prev.get("items", {}).get(s):
             out.append(f"⚠️ {s} 今天找不到符合品項（缺貨或改名？）")
     out += product_alerts(cfg, hist, date)
+    out += chain_alerts(cfg, hist, date)
+    return out
+
+
+def _chain_best(entry, slot):
+    """Cheapest purchasable chain-store offer for a slot: (store, offer) or None."""
+    offers = (((entry or {}).get("chains") or {}).get("items") or {}).get(slot) or {}
+    ok = [(s, o) for s, o in offers.items() if o and o.get("in_stock", True)]
+    return min(ok, key=lambda x: x[1]["price"]) if ok else None
+
+
+def chain_alerts(cfg: dict, hist: dict, date: str) -> list[str]:
+    """A part reaches its target price at a chain store (and is cheaper than CoolPC)."""
+    out = []
+    cur = hist[date]
+    prev_dates = [d for d in hist if d < date]
+    prev = hist[prev_dates[-1]] if prev_dates else None
+    for it in cfg["items"]:
+        s, tp = it["slot"], it.get("target_price")
+        b = _chain_best(cur, s)
+        if tp is None or not b:
+            continue
+        store, o = b
+        cp = (cur["items"].get(s) or {}).get("price")
+        pb = _chain_best(prev, s)
+        if o["price"] <= tp and (cp is None or o["price"] < cp) and (pb is None or pb[1]["price"] > tp):
+            out.append(f"🎯 {s} 在 {store} 達到目標價：{fmt(o['price'])} ≤ {fmt(tp)}"
+                       + (f"（原價屋 {fmt(cp)}）" if cp else ""))
     return out
 
 
@@ -64,7 +92,7 @@ def product_alerts(cfg: dict, hist: dict, date: str) -> list[str]:
         s, tp = prod["slot"], prod.get("target_price")
         b, pb = _best(cur, s), _best(prev, s)
         if not b:
-            errs = (((cur.get("products") or {}).get(s) or {}).get("errors")) or []
+            errs = [e for e in ((((cur.get("products") or {}).get(s) or {}).get("errors")) or []) if not e.get("nomatch")]
             if errs:
                 out.append(f"⚠️ {s} 今天所有價格來源都失敗：" + "；".join(f"{e['source']} {e['error']}" for e in errs))
             continue
@@ -91,13 +119,17 @@ def daily_summary(cfg: dict, hist: dict, date: str) -> str:
     if tgt:
         line += f"，目標 {fmt(tgt)}，差 {fmt(cur['total'] - tgt)}"
     line = f"{line}；{hits}/{n} 已達目標價"
+    mix = (((cur.get("chains") or {}).get("totals")) or {}).get("mix")
+    if mix:
+        names = "＋".join(["原價屋"] + [s["name"] for s in (cfg.get("chains") or {}).get("stores", [])])
+        line += f"\n各通路最低組合 {fmt(mix)}（{names} 各取最便宜）"
     for prod in cfg.get("products", []):
         b = _best(cur, prod["slot"])
         tp = prod.get("target_price")
         if b:
             line += f"\n{prod['slot']} 最低 {fmt(b['price'])}（{b['source']}）" + (f"，目標 {fmt(tp)}" if tp else "")
         else:
-            line += f"\n{prod['slot']} 今天沒有抓到價格"
+            line += f"\n{prod['slot']} 今天沒有符合的報價"
     return line
 
 
