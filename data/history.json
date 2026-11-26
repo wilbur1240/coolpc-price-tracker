@@ -1526,7 +1526,7 @@
    },
    "主機板": {
     "min": 1790,
-    "count": 347
+    "count": 348
    },
    "記憶體": {
     "min": 780,
@@ -1538,7 +1538,7 @@
    },
    "顯示卡": {
     "min": 190,
-    "count": 204
+    "count": 203
    },
    "電源供應器": {
     "min": 1090,
@@ -1553,7 +1553,7 @@
     "count": 720
    }
   },
-  "count": 6592,
+  "count": 6598,
   "products": {
    "Bambu Lab P2S": {
     "best": {
@@ -1596,7 +1596,8 @@
       "in_stock": true,
       "url": "https://online.uni-prosperity.com.tw/zh/%E6%8B%93%E7%AB%B9/A504021651301.html",
       "via": "BigGo",
-      "group": "主要通路（BigGo 比價）"
+      "group": "主要通路（BigGo 比價）",
+      "stale": "2026-11-26"
      },
      {
       "source": "順發線上購物",
@@ -1605,7 +1606,8 @@
       "in_stock": true,
       "url": "https://www.isunfar.com.tw/product/?prodseq=380C03",
       "via": "BigGo",
-      "group": "主要通路（BigGo 比價）"
+      "group": "主要通路（BigGo 比價）",
+      "stale": "2026-11-26"
      },
      {
       "source": "momo購物網",
@@ -1614,7 +1616,8 @@
       "in_stock": true,
       "url": "https://www.momoshop.com.tw/TP/TP0005634/goodsDetail/TP00056340007789",
       "via": "BigGo",
-      "group": "主要通路（BigGo 比價）"
+      "group": "主要通路（BigGo 比價）",
+      "stale": "2026-11-26"
      },
      {
       "source": "酷澎 Coupang",
@@ -1623,24 +1626,29 @@
       "in_stock": true,
       "url": "https://coupang.onelink.me/yowQ?pageKey=679015396163587&ctag=679015396163587&itemId=646526782980164&vendorItemId=646526783078437&pid=coupang_partners&c=AF8782393&is_retargeting=true&af_reengagement_window=7d&af_c_id=AF8782393&af_sub5=TWAFSDP&af_click_lookback=7d&deep_link_value=coupang%3A%2F%2Fproduct%3FpId%3D679015396163587%26itemId%3D646526782980164%26vendorItemId%3D646526783078437&af_r=https%3A%2F%2Flink.tw.coupang.com%2Fre2%2FTWAFSDP%3Flptag%3DAF8782393",
       "via": "BigGo",
-      "group": "主要通路（BigGo 比價）"
+      "group": "主要通路（BigGo 比價）",
+      "stale": "2026-11-26"
      }
     ],
-    "errors": []
+    "errors": [
+     {
+      "source": "主要通路（BigGo 比價）",
+      "error": "HTTP 429"
+     }
+    ]
    },
    "ELEGOO Centauri Carbon 2": {
     "best": null,
     "offers": [],
     "errors": [
      {
-      "source": "主要通路（BigGo 比價）",
-      "error": "沒有符合的商品（可能沒賣這個版本）",
-      "nomatch": true
+      "source": "3D列印基地站",
+      "error": "GitHub 主機在美國，這個來源擋海外連線；只在台灣 IP 執行時抓取",
+      "skipped": true
      },
      {
-      "source": "3D列印基地站",
-      "error": "沒有符合的商品（可能沒賣這個版本）",
-      "nomatch": true
+      "source": "主要通路（BigGo 比價）",
+      "error": "HTTP 429"
      }
     ]
    }
@@ -1757,54 +1765,10 @@
      "欣亞": null
     }
    },
-   "errors": [
-    {
-     "store": "順發",
-     "slot": "CPU",
-     "error": "ConnectTimeout"
-    },
-    {
-     "store": "順發",
-     "slot": "GPU",
-     "error": "ConnectTimeout"
-    },
-    {
-     "store": "順發",
-     "slot": "GPU 升級",
-     "error": "連續失敗，今天略過"
-    },
-    {
-     "store": "順發",
-     "slot": "主機板",
-     "error": "連續失敗，今天略過"
-    },
-    {
-     "store": "順發",
-     "slot": "RAM 64GB",
-     "error": "連續失敗，今天略過"
-    },
-    {
-     "store": "順發",
-     "slot": "SSD 2TB",
-     "error": "連續失敗，今天略過"
-    },
-    {
-     "store": "順發",
-     "slot": "PSU 850W",
-     "error": "連續失敗，今天略過"
-    },
-    {
-     "store": "順發",
-     "slot": "散熱器",
-     "error": "連續失敗，今天略過"
-    },
-    {
-     "store": "順發",
-     "slot": "機殼",
-     "error": "連續失敗，今天略過"
-    }
+   "errors": [],
+   "skipped": [
+    "順發"
    ],
-   "skipped": [],
    "totals": {
     "stores": {
      "原價屋": 95210,
@@ -1813,10 +1777,13 @@
      "欣亞": null
     },
     "mix": 93770
-   },
-   "local_refreshed": {}
+   }
   },
-  "alerts": [],
-  "alerts_sent": []
+  "alerts": [
+   "⚠️ ELEGOO Centauri Carbon 2 今天所有價格來源都失敗：主要通路（BigGo 比價） HTTP 429"
+  ],
+  "alerts_sent": [
+   "⚠️ ELEGOO Centauri Carbon 2 今天所有價格來源都失敗：主要通路（BigGo 比價） HTTP 429"
+  ]
  }
 }
