@@ -1785,5 +1785,329 @@
   "alerts_sent": [
    "⚠️ ELEGOO Centauri Carbon 2 今天所有價格來源都失敗：主要通路（BigGo 比價） HTTP 429"
   ]
+ },
+ "2026-11-27": {
+  "items": {
+   "CPU": {
+    "name": "｛AMD R7 9700X｝代理盒裝【8核/16緒】3.8G(↑5.5G)65W /具RDNA內顯",
+    "price": 11550,
+    "qty": 1,
+    "alts": 0,
+    "cat": "處理器 CPU"
+   },
+   "GPU": {
+    "name": "｛華碩 DUAL-RTX5060TI-O16G｝2632MHz/23cm/雙風扇/註冊四年保固",
+    "price": 25590,
+    "qty": 1,
+    "alts": 13,
+    "cat": "顯示卡VGA"
+   },
+   "GPU 升級": {
+    "name": "限搭機｛技嘉 RTX5070Ti WINDFORCE OC SFF 16G｝2497MHz/31cm/三風扇/註四年",
+    "price": 47990,
+    "qty": 1,
+    "alts": 8,
+    "cat": "顯示卡VGA"
+   },
+   "主機板": {
+    "name": "｛微星 MAG B850 TOMAHAWK MAX WIFI II｝/ATX/5G+Wi-Fi7/註五年/14+2+1相",
+    "price": 8390,
+    "qty": 1,
+    "alts": 0,
+    "cat": "主機板 MB"
+   },
+   "RAM 64GB": {
+    "name": "美光｛Micron Crucial 64GB(雙通32GB*2) DDR5 5600｝/CL46(原生顆粒)",
+    "price": 29999,
+    "qty": 1,
+    "alts": 35,
+    "cat": "記憶體 RAM"
+   },
+   "SSD 2TB": {
+    "name": "WD 黑標｛SN850X 2TB｝/Gen4 PCIe 4.0/讀7300/寫6600/TLC/電競級【五年保】",
+    "price": 12111,
+    "qty": 1,
+    "alts": 0,
+    "cat": "固態硬碟 M.2｜SSD"
+   },
+   "PSU 850W": {
+    "name": "｛XPG CORE SHIFT II VE 850W｝雙8/金牌/直出線/ATX3.1(PCIe 5.1)/5年保",
+    "price": 2390,
+    "qty": 1,
+    "alts": 55,
+    "cat": "電源供應器"
+   },
+   "散熱器": {
+    "name": "｛利民 Phantom Spirit 120｝7導管(6mm)/雙塔雙扇/高15.7cm/陽極黑上蓋【WXZ】",
+    "price": 1490,
+    "qty": 1,
+    "alts": 0,
+    "cat": "散熱器｜散熱墊｜散熱膏"
+   },
+   "機殼": {
+    "name": "｛Fractal Design Pop 2 Air RGB 黑｝顯卡長41.6/CPU高17.5/玻璃透側/ATX(POA2A-03)",
+    "price": 3690,
+    "qty": 1,
+    "alts": 1,
+    "cat": "CASE 機殼(+電源)"
+   }
+  },
+  "total": 95210,
+  "complete": true,
+  "missing": [],
+  "cat_min": {
+   "CPU": {
+    "min": 2099,
+    "count": 40
+   },
+   "主機板": {
+    "min": 1790,
+    "count": 347
+   },
+   "記憶體": {
+    "min": 780,
+    "count": 187
+   },
+   "SSD": {
+    "min": 1111,
+    "count": 156
+   },
+   "顯示卡": {
+    "min": 190,
+    "count": 203
+   },
+   "電源供應器": {
+    "min": 1090,
+    "count": 341
+   },
+   "散熱器": {
+    "min": 1,
+    "count": 180
+   },
+   "CASE": {
+    "min": 790,
+    "count": 718
+   }
+  },
+  "count": 6616,
+  "products": {
+   "Bambu Lab P2S": {
+    "best": {
+     "source": "3DMart（台灣總代理）",
+     "title": "拓竹 Bambu Lab P2S 3D列印機系列（P2S）",
+     "price": 23500,
+     "in_stock": true,
+     "url": "https://3dmart.com.tw/products/bambu-lab-p2s-3d-printer-full",
+     "group": "3DMart（台灣總代理）"
+    },
+    "offers": [
+     {
+      "source": "3DMart（台灣總代理）",
+      "title": "拓竹 Bambu Lab P2S 3D列印機系列（P2S）",
+      "price": 23500,
+      "in_stock": true,
+      "url": "https://3dmart.com.tw/products/bambu-lab-p2s-3d-printer-full",
+      "group": "3DMart（台灣總代理）"
+     },
+     {
+      "source": "Kidendesign 起點設計",
+      "title": "拓竹Bambu Lab P2S /P2S Combo 3D列印機（P2S / 單機）",
+      "price": 23500,
+      "in_stock": false,
+      "url": "https://shop.kidendesign.com/products/bambu-lab-p2s",
+      "group": "Kidendesign 起點設計"
+     },
+     {
+      "source": "天馬科技",
+      "title": "拓竹Bambu Lab P2S /P2S Combo 3D列印機（P2S）",
+      "price": 23500,
+      "in_stock": true,
+      "url": "https://shop.teama.com.tw/products/bambu-lab-p2s-p2s-combo",
+      "group": "天馬科技"
+     },
+     {
+      "source": "萬家福線上購物",
+      "title": "[拓竹Bambu Lab ]P2S 3D列印機",
+      "price": 23500,
+      "in_stock": true,
+      "url": "https://online.uni-prosperity.com.tw/zh/%E6%8B%93%E7%AB%B9/A504021651301.html",
+      "via": "BigGo",
+      "group": "主要通路（BigGo 比價）"
+     },
+     {
+      "source": "順發線上購物",
+      "title": "(客訂品)Bambu Lab P2S 3D列印機",
+      "price": 23500,
+      "in_stock": true,
+      "url": "https://www.isunfar.com.tw/product/?prodseq=380C03",
+      "via": "BigGo",
+      "group": "主要通路（BigGo 比價）"
+     },
+     {
+      "source": "momo購物網",
+      "title": "【Bambu Lab】【領券再折】P2S/P2S Combo 3D列印機 廠商配送",
+      "price": 23500,
+      "in_stock": true,
+      "url": "https://www.momoshop.com.tw/TP/TP0005634/goodsDetail/TP00056340007789",
+      "via": "BigGo",
+      "group": "主要通路（BigGo 比價）"
+     },
+     {
+      "source": "酷澎 Coupang",
+      "title": "3DMart 拓竹 Bambu Lab P2S 系列 3D印表機，操作簡單，穩定列印，多種材料支援",
+      "price": 24500,
+      "in_stock": true,
+      "url": "https://coupang.onelink.me/yowQ?pageKey=679015396163587&ctag=679015396163587&itemId=644411306065976&vendorItemId=644411306131492&pid=coupang_partners&c=AF8782393&is_retargeting=true&af_reengagement_window=7d&af_c_id=AF8782393&af_sub5=TWAFSDP&af_click_lookback=7d&deep_link_value=coupang%3A%2F%2Fproduct%3FpId%3D679015396163587%26itemId%3D644411306065976%26vendorItemId%3D644411306131492&af_r=https%3A%2F%2Flink.tw.coupang.com%2Fre2%2FTWAFSDP%3Flptag%3DAF8782393",
+      "via": "BigGo",
+      "group": "主要通路（BigGo 比價）"
+     }
+    ],
+    "errors": []
+   },
+   "ELEGOO Centauri Carbon 2": {
+    "best": null,
+    "offers": [],
+    "errors": [
+     {
+      "source": "3D列印基地站",
+      "error": "GitHub 主機在美國，這個來源擋海外連線；只在台灣 IP 執行時抓取",
+      "skipped": true
+     },
+     {
+      "source": "主要通路（BigGo 比價）",
+      "error": "沒有符合的商品（可能沒賣這個版本）",
+      "nomatch": true
+     }
+    ]
+   }
+  },
+  "chains": {
+   "items": {
+    "CPU": {
+     "順發": null,
+     "PChome 24h": {
+      "title": "AMD 超微 Ryzen 7 9700X 8核/16緒 處理器《3.8GHz/40M/65W/AM5》(代理商貨)",
+      "price": 11550,
+      "url": "https://24h.pchome.com.tw/prod/DSBC0B-A900I9980"
+     },
+     "欣亞": {
+      "title": "AMD【8核】Ryzen7 9700X",
+      "price": 11550,
+      "url": "https://www.sinya.com.tw/prod/201530"
+     }
+    },
+    "GPU": {
+     "順發": null,
+     "PChome 24h": {
+      "title": "GIGABYTE 技嘉 RTX 5060 Ti WINDFORCE 8G 顯示卡+技嘉 A520M K V2 主機板+凌航 D4 16G/3200 NeoForza",
+      "price": 24990,
+      "url": "https://24h.pchome.com.tw/prod/DRADUX-A900K7KNO"
+     },
+     "欣亞": {
+      "title": "華碩 DUAL-RTX5060TI-O16G",
+      "price": 25590,
+      "url": "https://www.sinya.com.tw/prod/221664"
+     }
+    },
+    "GPU 升級": {
+     "順發": null,
+     "PChome 24h": {
+      "title": "MSI 微星 GeForce RTX 5070 Ti 16G SHADOW 3X OC 顯示卡",
+      "price": 47990,
+      "url": "https://24h.pchome.com.tw/prod/DRADLA-A900IDCUA"
+     },
+     "欣亞": {
+      "title": "華碩 TUF-RTX5070TI-O16G-WHITE-GAMING",
+      "price": 47990,
+      "url": "https://www.sinya.com.tw/prod/213385"
+     }
+    },
+    "主機板": {
+     "順發": null,
+     "PChome 24h": {
+      "title": "MSI 微星 MAG B850 TOMAHAWK MAX WIFI II 主機板",
+      "price": 8490,
+      "url": "https://24h.pchome.com.tw/prod/DSAJ28-A900JZMQV"
+     },
+     "欣亞": {
+      "title": "微星 MAG B850 TOMAHAWK MAX WIFI II",
+      "price": 8390,
+      "url": "https://www.sinya.com.tw/prod/224346"
+     }
+    },
+    "RAM 64GB": {
+     "順發": null,
+     "PChome 24h": {
+      "title": "Micron 美光 PRO DDR5-6000 64G(32G*2) CL40 超頻 桌上型記憶體《白》(支援XMP/EXPO)",
+      "price": 31499,
+      "url": "https://24h.pchome.com.tw/prod/DSBC3V-A900IHS58"
+     },
+     "欣亞": {
+      "title": "威剛 XPG LANCER DDR5-6000 64G(32G*2)-白(CL30/支援XMP&EXPO)",
+      "price": 32999,
+      "url": "https://www.sinya.com.tw/prod/229886"
+     }
+    },
+    "SSD 2TB": {
+     "順發": null,
+     "PChome 24h": {
+      "title": "WD 威騰 WD_BLACK黑標 SN850X 2TB Gen4 NVMe PCIe SSD固態硬碟(WDS200T2X0E)",
+      "price": 12988,
+      "url": "https://24h.pchome.com.tw/prod/DRAHI2-A900H3ONG"
+     },
+     "欣亞": {
+      "title": "WD_BLACK SN850X 2TB",
+      "price": 12000,
+      "url": "https://www.sinya.com.tw/prod/223150"
+     }
+    },
+    "PSU 850W": {
+     "順發": null,
+     "PChome 24h": {
+      "title": "MONTECH GAMMA 3 850W 80Plus 金牌 ATX 3.1(PCIe 5.1) 電源供應器",
+      "price": 2449,
+      "url": "https://24h.pchome.com.tw/prod/DSAZ6G-A900K9F0K"
+     },
+     "欣亞": null
+    },
+    "散熱器": {
+     "順發": null,
+     "PChome 24h": {
+      "title": "Thermalright 利民 Phantom Spirit 120 7導管 280W 散熱器(高15.7)",
+      "price": 1490,
+      "url": "https://24h.pchome.com.tw/prod/DSBC1T-A900GKFM5"
+     },
+     "欣亞": {
+      "title": "利民 Phantom Spirit 120",
+      "price": 1490,
+      "url": "https://www.sinya.com.tw/prod/190249"
+     }
+    },
+    "機殼": {
+     "順發": null,
+     "PChome 24h": {
+      "title": "Fractal Design Pop 2 Air 黑 玻璃 ATX機殼",
+      "price": 3660,
+      "url": "https://24h.pchome.com.tw/prod/DRAEB3-A900JT93S"
+     },
+     "欣亞": null
+    }
+   },
+   "errors": [],
+   "skipped": [
+    "順發"
+   ],
+   "totals": {
+    "stores": {
+     "原價屋": 95210,
+     "順發": null,
+     "PChome 24h": 97116,
+     "欣亞": null
+    },
+    "mix": 94469
+   }
+  },
+  "alerts": [],
+  "alerts_sent": []
  }
 }
