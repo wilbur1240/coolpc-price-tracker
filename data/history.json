@@ -2109,5 +2109,302 @@
   },
   "alerts": [],
   "alerts_sent": []
+ },
+ "2026-11-28": {
+  "items": {
+   "CPU": {
+    "name": "｛AMD R7 9700X｝代理盒裝【8核/16緒】3.8G(↑5.5G)65W /具RDNA內顯",
+    "price": 11550,
+    "qty": 1,
+    "alts": 0,
+    "cat": "處理器 CPU"
+   },
+   "主機板 B850 ELITE": {
+    "name": "｛技嘉 B850 AORUS ELITE WIFI7｝/ATX/2.5G+Wi-Fi7/註五年/14+2+2相 *優惠至11/30",
+    "price": 7490,
+    "qty": 1,
+    "alts": 0,
+    "cat": "主機板 MB"
+   },
+   "RAM 24GB": {
+    "name": "十銓｛T-CREATE EXPERT 引領者 24G DDR5-6000｝/CL28 黑",
+    "price": 9999,
+    "qty": 1,
+    "alts": 1,
+    "cat": "記憶體 RAM"
+   },
+   "SSD KC3000 2TB": {
+    "name": "｛金士頓 KC3000 2TB｝/Gen4 PCIe 4.0/讀7000/寫7000/TLC【五年保】",
+    "price": 11000,
+    "qty": 1,
+    "alts": 0,
+    "cat": "固態硬碟 M.2｜SSD"
+   },
+   "散熱器": {
+    "name": "｛利民 Phantom Spirit 120｝7導管(6mm)/雙塔雙扇/高15.7cm/陽極黑上蓋【WXZ】",
+    "price": 1490,
+    "qty": 1,
+    "alts": 0,
+    "cat": "散熱器｜散熱墊｜散熱膏"
+   },
+   "顯示卡 5060Ti 16G": {
+    "name": "｛華碩 PRIME-RTX5060TI-16G｝2602MHz/31cm/三風扇/註冊五年保固",
+    "price": 26590,
+    "qty": 1,
+    "alts": 0,
+    "cat": "顯示卡VGA"
+   },
+   "機殼＋電源": {
+    "name": "Montech Air 903 MAX 黑/玻璃透側/E-ATX+Montech GAMMA 3 750W/金牌/ATX3.1電源！",
+    "price": 3590,
+    "qty": 1,
+    "alts": 0,
+    "cat": "CASE 機殼(+電源)"
+   }
+  },
+  "total": 71709,
+  "complete": true,
+  "missing": [],
+  "cat_min": {
+   "CPU": {
+    "min": 2099,
+    "count": 41
+   },
+   "主機板": {
+    "min": 1790,
+    "count": 348
+   },
+   "記憶體": {
+    "min": 780,
+    "count": 187
+   },
+   "SSD": {
+    "min": 1111,
+    "count": 156
+   },
+   "顯示卡": {
+    "min": 190,
+    "count": 202
+   },
+   "電源供應器": {
+    "min": 1090,
+    "count": 342
+   },
+   "散熱器": {
+    "min": 1,
+    "count": 180
+   },
+   "CASE": {
+    "min": 790,
+    "count": 718
+   }
+  },
+  "count": 6619,
+  "products": {
+   "Bambu Lab P2S": {
+    "best": {
+     "source": "3DMart（台灣總代理）",
+     "title": "拓竹 Bambu Lab P2S 3D列印機系列（P2S）",
+     "price": 23500,
+     "in_stock": true,
+     "url": "https://3dmart.com.tw/products/bambu-lab-p2s-3d-printer-full",
+     "group": "3DMart（台灣總代理）"
+    },
+    "offers": [
+     {
+      "source": "3DMart（台灣總代理）",
+      "title": "拓竹 Bambu Lab P2S 3D列印機系列（P2S）",
+      "price": 23500,
+      "in_stock": true,
+      "url": "https://3dmart.com.tw/products/bambu-lab-p2s-3d-printer-full",
+      "group": "3DMart（台灣總代理）"
+     },
+     {
+      "source": "Kidendesign 起點設計",
+      "title": "拓竹Bambu Lab P2S /P2S Combo 3D列印機（P2S / 單機）",
+      "price": 23500,
+      "in_stock": false,
+      "url": "https://shop.kidendesign.com/products/bambu-lab-p2s",
+      "group": "Kidendesign 起點設計"
+     },
+     {
+      "source": "天馬科技",
+      "title": "拓竹Bambu Lab P2S /P2S Combo 3D列印機（P2S）",
+      "price": 23500,
+      "in_stock": true,
+      "url": "https://shop.teama.com.tw/products/bambu-lab-p2s-p2s-combo",
+      "group": "天馬科技"
+     },
+     {
+      "source": "萬家福線上購物",
+      "title": "[拓竹Bambu Lab ]P2S 3D列印機",
+      "price": 23500,
+      "in_stock": true,
+      "url": "https://online.uni-prosperity.com.tw/zh/%E6%8B%93%E7%AB%B9/A504021651301.html",
+      "via": "BigGo",
+      "group": "主要通路（BigGo 比價）"
+     },
+     {
+      "source": "順發線上購物",
+      "title": "(客訂品)Bambu Lab P2S 3D列印機",
+      "price": 23500,
+      "in_stock": true,
+      "url": "https://www.isunfar.com.tw/product/?prodseq=380C03",
+      "via": "BigGo",
+      "group": "主要通路（BigGo 比價）"
+     },
+     {
+      "source": "momo購物網",
+      "title": "【Bambu Lab】【領券再折】P2S/P2S Combo 3D列印機 廠商配送",
+      "price": 23500,
+      "in_stock": true,
+      "url": "https://www.momoshop.com.tw/TP/TP0005634/goodsDetail/TP00056340007789",
+      "via": "BigGo",
+      "group": "主要通路（BigGo 比價）"
+     },
+     {
+      "source": "酷澎 Coupang",
+      "title": "3DMart 拓竹 Bambu Lab P2S 系列 3D印表機，操作簡單，穩定列印，多種材料支援",
+      "price": 24500,
+      "in_stock": true,
+      "url": "https://coupang.onelink.me/yowQ?pageKey=679015396163587&ctag=679015396163587&itemId=644411306065976&vendorItemId=644411306131492&pid=coupang_partners&c=AF8782393&is_retargeting=true&af_reengagement_window=7d&af_c_id=AF8782393&af_sub5=TWAFSDP&af_click_lookback=7d&deep_link_value=coupang%3A%2F%2Fproduct%3FpId%3D679015396163587%26itemId%3D644411306065976%26vendorItemId%3D644411306131492&af_r=https%3A%2F%2Flink.tw.coupang.com%2Fre2%2FTWAFSDP%3Flptag%3DAF8782393",
+      "via": "BigGo",
+      "group": "主要通路（BigGo 比價）"
+     }
+    ],
+    "errors": []
+   },
+   "ELEGOO Centauri Carbon 2": {
+    "best": null,
+    "offers": [],
+    "errors": [
+     {
+      "source": "3D列印基地站",
+      "error": "GitHub 主機在美國，這個來源擋海外連線；只在台灣 IP 執行時抓取",
+      "skipped": true
+     },
+     {
+      "source": "主要通路（BigGo 比價）",
+      "error": "沒有符合的商品（可能沒賣這個版本）",
+      "nomatch": true
+     }
+    ]
+   }
+  },
+  "chains": {
+   "items": {
+    "CPU": {
+     "順發": null,
+     "PChome 24h": {
+      "title": "AMD 超微 Ryzen 7 9700X 8核/16緒 處理器《3.8GHz/40M/65W/AM5》(代理商貨)",
+      "price": 11550,
+      "url": "https://24h.pchome.com.tw/prod/DSBC0B-A900I9980"
+     },
+     "欣亞": {
+      "title": "AMD【8核】Ryzen7 9700X",
+      "price": 11550,
+      "url": "https://www.sinya.com.tw/prod/201530",
+      "stale": "2026-11-27"
+     }
+    },
+    "主機板 B850 ELITE": {
+     "順發": null,
+     "PChome 24h": {
+      "title": "GIGABYTE 技嘉 B850 AORUS ELITE WIFI7 主機板",
+      "price": 7990,
+      "url": "https://24h.pchome.com.tw/prod/DSAJ9P-A900J0F9G"
+     },
+     "欣亞": null
+    },
+    "RAM 24GB": {
+     "順發": null,
+     "PChome 24h": null,
+     "欣亞": null
+    },
+    "SSD KC3000 2TB": {
+     "順發": null,
+     "PChome 24h": {
+      "title": "Kingston 金士頓 KC3000 2TB PCIe 4.0 NVMe M.2 SSD (SKC3000D/2048G)",
+      "price": 11966,
+      "url": "https://24h.pchome.com.tw/prod/DRAH6Y-A900C20IQ"
+     },
+     "欣亞": null
+    },
+    "散熱器": {
+     "順發": null,
+     "PChome 24h": {
+      "title": "Thermalright 利民 Phantom Spirit 120 7導管 280W 散熱器(高15.7)",
+      "price": 1490,
+      "url": "https://24h.pchome.com.tw/prod/DSBC1T-A900GKFM5"
+     },
+     "欣亞": {
+      "title": "利民 Phantom Spirit 120",
+      "price": 1490,
+      "url": "https://www.sinya.com.tw/prod/190249",
+      "stale": "2026-11-27"
+     }
+    },
+    "顯示卡 5060Ti 16G": {
+     "順發": null,
+     "PChome 24h": {
+      "title": "ASUS 華碩 PRIME GeForce RTX 5060 Ti 16GB GDDR7 顯示卡",
+      "price": 26590,
+      "url": "https://24h.pchome.com.tw/prod/DRADKY-1900KK9XK"
+     },
+     "欣亞": null
+    }
+   },
+   "errors": [
+    {
+     "store": "欣亞",
+     "slot": "CPU",
+     "error": "ConnectTimeout"
+    },
+    {
+     "store": "欣亞",
+     "slot": "主機板 B850 ELITE",
+     "error": "ConnectTimeout"
+    },
+    {
+     "store": "欣亞",
+     "slot": "RAM 24GB",
+     "error": "連續失敗，今天略過"
+    },
+    {
+     "store": "欣亞",
+     "slot": "SSD KC3000 2TB",
+     "error": "連續失敗，今天略過"
+    },
+    {
+     "store": "欣亞",
+     "slot": "散熱器",
+     "error": "連續失敗，今天略過"
+    },
+    {
+     "store": "欣亞",
+     "slot": "顯示卡 5060Ti 16G",
+     "error": "連續失敗，今天略過"
+    }
+   ],
+   "skipped": [
+    "順發"
+   ],
+   "totals": {
+    "stores": {
+     "原價屋": 71709,
+     "順發": null,
+     "PChome 24h": null,
+     "欣亞": null
+    },
+    "mix": 71709
+   }
+  },
+  "alerts": [
+   "🎯 主機板 B850 ELITE 達到目標價：7,490 ≤ 7,490（｛技嘉 B850 AORUS ELITE WIFI7｝/ATX/2.5G+Wi-）",
+   "🎯 RAM 24GB 達到目標價：9,999 ≤ 9,999（十銓｛T-CREATE EXPERT 引領者 24G DDR5-6000｝/CL）",
+   "🎯 SSD KC3000 2TB 達到目標價：11,000 ≤ 11,000（｛金士頓 KC3000 2TB｝/Gen4 PCIe 4.0/讀7000/寫70）",
+   "🎯 顯示卡 5060Ti 16G 達到目標價：26,590 ≤ 26,590（｛華碩 PRIME-RTX5060TI-16G｝2602MHz/31cm/三風扇）",
+   "🎯 機殼＋電源 達到目標價：3,590 ≤ 3,590（Montech Air 903 MAX 黑/玻璃透側/E-ATX+Montech）"
+  ]
  }
 }
