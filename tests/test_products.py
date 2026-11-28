@@ -7,7 +7,7 @@ from tracker.products import (biggo_items, listing_is_variant_excluded, parse_ba
                               parse_cyberbiz)
 
 ROOT = Path(__file__).resolve().parent.parent
-CFG = json.loads((ROOT / "data/config.json").read_text(encoding="utf-8"))
+CFG = json.loads((ROOT / "tests/fixtures/config_2026-11-18.json").read_text(encoding="utf-8"))
 P2S = next(p for p in CFG["products"] if p["slot"] == "Bambu Lab P2S")
 STORES = next(s for s in P2S["sources"] if s["type"] == "biggo")["stores"]
 

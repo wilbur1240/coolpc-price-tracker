@@ -31,7 +31,7 @@ def load_sample():
 class SampleMatchTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.cfg = json.loads((ROOT / "data/config.json").read_text(encoding="utf-8"))
+        cls.cfg = json.loads((ROOT / "tests/fixtures/config_2026-11-18.json").read_text(encoding="utf-8"))
         cls.res = match_config(cls.cfg, load_sample())
 
     def price(self, slot):

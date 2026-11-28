@@ -104,6 +104,7 @@ $('title').textContent=name+' 價格追蹤';
 document.title=name+' 價格追蹤';
 $('sub').textContent=`原價屋線上估價 · 資料日期 ${date} · 已追蹤 ${dates.length} 天`;
 $('gen').textContent=D.generated;
+if(cfg.purchase_note)$('sub').textContent+=' · '+cfg.purchase_note;
 
 function delta(c,o){
  if(c==null||o==null)return '<span class=mut>—</span>';
@@ -114,9 +115,11 @@ function delta(c,o){
 
 // summary
 const complete=!!cur.complete;
-const completeTotals=dates.filter(d=>H[d].complete).map(d=>H[d].total);
+const since=cfg.build_since||'';
+const buildDates=dates.filter(d=>d>=since);
+const completeTotals=buildDates.filter(d=>H[d].complete).map(d=>H[d].total);
 const low=completeTotals.length?Math.min(...completeTotals):null;
-const prevTotal=prev&&prev.complete?prev.total:null;
+const prevTotal=prev&&prev.complete&&prevDates[prevDates.length-1]>=(cfg.build_since||'')?prev.total:null;
 const tgt=cfg.target_total;
 const withTp=cfg.items.filter(it=>it.target_price!=null);
 const hits=withTp.filter(it=>cur.items[it.slot]&&cur.items[it.slot].price<=it.target_price).length;
@@ -226,7 +229,7 @@ function chart(el,pts,target,emptyMsg){
  el.innerHTML=`<svg class=chart viewBox="0 0 ${W} ${Hh}" role=img>${g}${pts.length>1?`<polyline class=ln points="${line}"/>`:''}${dots}${xl}</svg>`+(pts.length===1?'<div class="mut small">目前只有一天的資料，累積更多天後會連成走勢線。</div>':'');
 }
 prods.forEach((p,pi)=>chart($('pc'+pi),dates.filter(d=>pbest(H[d],p.slot)).map(d=>({d,v:pbest(H[d],p.slot).price})),p.target_price,'還沒有價格紀錄。'));
-chart($('totalChart'),dates.filter(d=>H[d].complete).map(d=>({d,v:H[d].total})),tgt,'還沒有完整（無缺項）的資料。');
+chart($('totalChart'),buildDates.filter(d=>H[d].complete).map(d=>({d,v:H[d].total})),tgt,'還沒有完整（無缺項）的資料。');
 
 $('chips').innerHTML=cfg.items.map(it=>`<button type=button data-s="${esc(it.slot)}">${esc(it.slot)}</button>`).join('');
 $('chips').querySelectorAll('button').forEach(b=>b.onclick=()=>pick(b.dataset.s));

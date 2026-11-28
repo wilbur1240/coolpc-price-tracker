@@ -7,7 +7,7 @@ from tracker.chains import parse_pchome, parse_sinya, parse_sunfar, pick, store_
 from tracker.products import parse_woocommerce, track_product
 
 ROOT = Path(__file__).resolve().parent.parent
-CFG = json.loads((ROOT / "data/config.json").read_text(encoding="utf-8"))
+CFG = json.loads((ROOT / "tests/fixtures/config_2026-11-18.json").read_text(encoding="utf-8"))
 ITEMS = {it["slot"]: it for it in CFG["items"]}
 CH = CFG["chains"]
 

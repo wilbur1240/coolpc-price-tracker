@@ -34,13 +34,19 @@ def compute_alerts(cfg: dict, hist: dict, date: str) -> list[str]:
         p = (prev or {}).get("items", {}).get(s) if prev else None
         if tp is not None and t["price"] <= tp and (p is None or p["price"] > tp):
             out.append(f"🎯 {s} 達到目標價：{fmt(t['price'])} ≤ {fmt(tp)}（{t['name'][:40]}）")
+        big_move = False
         if p and p["price"]:
             pct = (t["price"] - p["price"]) / p["price"] * 100
             if abs(pct) >= CHANGE_PCT:
+                big_move = True
                 arrow = "📉 降" if pct < 0 else "📈 漲"
                 out.append(f"{arrow} {s} {pct:+.1f}%：{fmt(p['price'])} → {fmt(t['price'])}")
+        lows = [h["items"][s]["price"] for d, h in hist.items() if d < date and (h.get("items") or {}).get(s)]
+        if lows and t["price"] < min(lows) and not big_move:
+            out.append(f"📉 {s} 創追蹤以來新低：{fmt(t['price'])}（先前最低 {fmt(min(lows))}）")
+    since = cfg.get("build_since", "")
     if cur.get("complete"):
-        past = [h["total"] for d, h in hist.items() if d < date and h.get("complete")]
+        past = [h["total"] for d, h in hist.items() if since <= d < date and h.get("complete")]
         if past and cur["total"] < min(past):
             out.append(f"🏆 總價創新低：{fmt(cur['total'])}（先前最低 {fmt(min(past))}）")
     for s in cur.get("missing", []):

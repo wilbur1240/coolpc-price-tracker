@@ -1,0 +1,364 @@
+{
+ "build_name": "Robotics Development Workstation",
+ "target_total": 63500,
+ "notify": {
+  "daily_summary": true
+ },
+ "watch_categories": [
+  "CPU",
+  "主機板",
+  "記憶體",
+  "SSD",
+  "顯示卡",
+  "電源供應器",
+  "散熱器",
+  "CASE"
+ ],
+ "items": [
+  {
+   "slot": "CPU",
+   "category": "CPU",
+   "match": [
+    "9700X"
+   ],
+   "exclude": [
+    "拆封",
+    "福利",
+    "盒損",
+    "X3D"
+   ],
+   "qty": 1,
+   "target_price": 9000,
+   "search": {
+    "*": "9700X",
+    "sinya": "9700X"
+   }
+  },
+  {
+   "slot": "GPU",
+   "category": "顯示卡",
+   "match": [
+    "5060Ti",
+    "16G"
+   ],
+   "exclude": [
+    "拆封",
+    "福利"
+   ],
+   "qty": 1,
+   "target_price": 22000,
+   "search": {
+    "*": "5060 Ti 16G",
+    "sinya": "RTX5060TI"
+   }
+  },
+  {
+   "slot": "GPU 升級",
+   "category": "顯示卡",
+   "match": [
+    "5070Ti",
+    "16G"
+   ],
+   "exclude": [
+    "拆封",
+    "福利"
+   ],
+   "qty": 1,
+   "target_price": 35000,
+   "optional": true,
+   "search": {
+    "*": "5070 Ti 16G",
+    "sinya": "RTX5070TI"
+   }
+  },
+  {
+   "slot": "主機板",
+   "category": "主機板",
+   "match": [
+    "B850",
+    "TOMAHAWK"
+   ],
+   "exclude": [
+    "拆封",
+    "福利"
+   ],
+   "qty": 1,
+   "target_price": 5500,
+   "search": {
+    "*": "B850 TOMAHAWK",
+    "sinya": "TOMAHAWK"
+   }
+  },
+  {
+   "slot": "RAM 64GB",
+   "category": "記憶體",
+   "match": [
+    "64G",
+    "*2"
+   ],
+   "exclude": [
+    "D4",
+    "DDR4",
+    "NB",
+    "筆電",
+    "SO-DIMM",
+    "拆封"
+   ],
+   "qty": 1,
+   "target_price": 15000,
+   "search": {
+    "*": "DDR5 64G",
+    "sinya": "64G"
+   },
+   "chain_match": [
+    "64G",
+    [
+     "*2",
+     "x2",
+     "2x",
+     "雙通"
+    ]
+   ],
+   "chain_exclude": [
+    "D4",
+    "SODIMM",
+    "筆記型"
+   ]
+  },
+  {
+   "slot": "SSD 2TB",
+   "category": "SSD",
+   "match": [
+    "SN850X",
+    "2TB"
+   ],
+   "exclude": [
+    "散熱片",
+    "拆封",
+    "福利"
+   ],
+   "qty": 1,
+   "target_price": 5000,
+   "search": {
+    "*": "SN850X 2TB",
+    "sinya": "SN850X"
+   }
+  },
+  {
+   "slot": "PSU 850W",
+   "category": "電源供應器",
+   "match": [
+    "850W",
+    "金牌",
+    "3.1"
+   ],
+   "exclude": [
+    "拆封",
+    "福利"
+   ],
+   "qty": 1,
+   "target_price": 3500,
+   "search": {
+    "*": "850W 金牌",
+    "sinya": "850W"
+   },
+   "chain_match": [
+    "850W",
+    "金牌"
+   ]
+  },
+  {
+   "slot": "散熱器",
+   "category": "散熱",
+   "match": [
+    "PhantomSpirit120"
+   ],
+   "exclude": [
+    "EVO",
+    "拆封"
+   ],
+   "qty": 1,
+   "target_price": 1500,
+   "search": {
+    "*": "Phantom Spirit 120",
+    "sinya": "Phantom"
+   }
+  },
+  {
+   "slot": "機殼",
+   "category": "CASE",
+   "match": [
+    "Pop",
+    "Air"
+   ],
+   "exclude": [
+    "拆封",
+    "Mini"
+   ],
+   "qty": 1,
+   "target_price": 2000,
+   "search": {
+    "*": "Pop 2 Air",
+    "sinya": "Pop"
+   }
+  }
+ ],
+ "chains": {
+  "stores": [
+   {
+    "name": "順發",
+    "type": "sunfar",
+    "local_only": true
+   },
+   {
+    "name": "PChome 24h",
+    "type": "pchome"
+   },
+   {
+    "name": "欣亞",
+    "type": "sinya"
+   }
+  ],
+  "exclude": [
+   "平台",
+   "(DIY)",
+   "電競電腦",
+   "桌機",
+   "電腦主機",
+   "套餐",
+   "組裝",
+   "福利",
+   "拆封",
+   "二手",
+   "展示",
+   "整新",
+   "預購"
+  ],
+  "ratio": [
+   0.5,
+   2.0
+  ]
+ },
+ "products": [
+  {
+   "slot": "Bambu Lab P2S",
+   "note": "3D 列印機單機（不含 AMS 的 Combo 版）",
+   "target_price": 20000,
+   "match": [
+    "P2S"
+   ],
+   "exclude": [
+    "零件",
+    "備品",
+    "噴嘴",
+    "鋼板",
+    "熱床",
+    "腳墊",
+    "耗材",
+    "線材",
+    "Guide",
+    "X2D",
+    "H2",
+    "二手",
+    "福利",
+    "拆封",
+    "租"
+   ],
+   "variant_exclude": [
+    "Combo"
+   ],
+   "price_min": 12000,
+   "price_max": 30000,
+   "sources": [
+    {
+     "name": "3DMart（台灣總代理）",
+     "type": "shopify",
+     "url": "https://3dmart.com.tw/products/bambu-lab-p2s-3d-printer-full"
+    },
+    {
+     "name": "Kidendesign 起點設計",
+     "type": "cyberbiz",
+     "url": "https://shop.kidendesign.com/products/bambu-lab-p2s"
+    },
+    {
+     "name": "天馬科技",
+     "type": "cyberbiz",
+     "url": "https://shop.teama.com.tw/products/bambu-lab-p2s-p2s-combo"
+    },
+    {
+     "name": "主要通路（BigGo 比價）",
+     "type": "biggo",
+     "query": "Bambu Lab P2S",
+     "stores": [
+      "momo",
+      "Coupang",
+      "蝦皮商城",
+      "PChome",
+      "萬家福",
+      "順發",
+      "燦坤",
+      "Yahoo"
+     ]
+    }
+   ]
+  },
+  {
+   "slot": "ELEGOO Centauri Carbon 2",
+   "note": "3D 列印機單機（不含 CANVAS 多色系統的 Combo 版）",
+   "target_price": null,
+   "match": [
+    "ELEGOO",
+    [
+     "CentauriCarbon2",
+     "CC2"
+    ]
+   ],
+   "exclude": [
+    "Combo",
+    "CANVAS",
+    "零件",
+    "備品",
+    "噴嘴",
+    "熱床",
+    "鋼板",
+    "PEI",
+    "耗材",
+    "線材",
+    "二手",
+    "福利",
+    "拆封",
+    "租"
+   ],
+   "variant_exclude": [
+    "Combo",
+    "列印包",
+    "新手包"
+   ],
+   "price_min": 7000,
+   "price_max": 15000,
+   "sources": [
+    {
+     "name": "3D列印基地站",
+     "type": "woocommerce",
+     "url": "https://www.3dpbase.com/shop/elegoo-centauri-carbon-2-cc2/",
+     "local_only": true
+    },
+    {
+     "name": "主要通路（BigGo 比價）",
+     "type": "biggo",
+     "query": "ELEGOO Centauri Carbon 2",
+     "stores": [
+      "momo",
+      "Coupang",
+      "蝦皮商城",
+      "PChome",
+      "萬家福",
+      "順發",
+      "燦坤",
+      "Yahoo"
+     ]
+    }
+   ]
+  }
+ ]
+}
